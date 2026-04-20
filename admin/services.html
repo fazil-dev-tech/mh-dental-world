@@ -106,20 +106,30 @@
         const filtered = allAdminServices.filter(s => s.title.toLowerCase().includes(term));
         renderServicesTable(filtered);
       });
+
+      if (MH.isSupabaseConfigured()) {
+        MH.supabase.channel('admin:services')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'services' }, () => {
+            loadAdminServices();
+          })
+          .subscribe();
+      }
     });
 
     async function loadAdminServices() {
-      if (MH.isAdminConfigured()) {
-        try { const { data } = await MH.supabaseAdmin.from('services').select('*').order('display_order'); allAdminServices = data || []; } catch(e) { allAdminServices = [...MH.SAMPLE_SERVICES]; }
+      if (MH.isSupabaseConfigured()) {
+        try { 
+          const { data } = await MH.supabase.from('services').select('*').order('display_order'); 
+          allAdminServices = data || []; 
+        } catch(e) { 
+          allAdminServices = []; 
+        }
       } else {
-        const stored = localStorage.getItem('mh_services');
-        allAdminServices = stored ? JSON.parse(stored) : [...MH.SAMPLE_SERVICES];
+        allAdminServices = [];
       }
       renderServicesTable(allAdminServices);
       document.getElementById('services-count').textContent = allAdminServices.length;
     }
-
-    function saveServicesLocal() { localStorage.setItem('mh_services', JSON.stringify(allAdminServices)); }
 
     function renderServicesTable(svcs) {
       const tbody = document.getElementById('services-tbody');
@@ -155,17 +165,26 @@
         e.preventDefault();
         const data = { title:document.getElementById('svc-title').value.trim(), icon:document.getElementById('svc-icon').value.trim()||'🦷', short_desc:document.getElementById('svc-short-desc').value.trim(), full_desc:document.getElementById('svc-full-desc').value.trim(), benefits:document.getElementById('svc-benefits').value.trim(), display_order:parseInt(document.getElementById('svc-order').value)||1, active:document.getElementById('svc-active').checked, featured:document.getElementById('svc-featured').checked };
         if(!data.title){MH.showToast('Title is required','error');return;}
-        if(MH.isAdminConfigured()){
-          try{ if(editingSvcId){await MH.supabaseAdmin.from('services').update(data).eq('id',editingSvcId);}else{await MH.supabaseAdmin.from('services').insert(data);} }catch(err){MH.showToast(err.message,'error');return;}
+        if(MH.isSupabaseConfigured()){
+          try{ if(editingSvcId){await MH.supabase.from('services').update(data).eq('id',editingSvcId);}else{await MH.supabase.from('services').insert(data);} }catch(err){MH.showToast(err.message,'error');return;}
         } else {
-          if(editingSvcId){const i=allAdminServices.findIndex(x=>x.id===editingSvcId);if(i!==-1)allAdminServices[i]={...allAdminServices[i],...data};}else{data.id=Date.now();allAdminServices.push(data);}
-          saveServicesLocal();
+          MH.showToast('Supabase not configured','error'); return;
         }
-        MH.showToast(editingSvcId?'Service updated!':'Service added!','success'); closeServiceModal(); await loadAdminServices();
+        MH.showToast(editingSvcId?'Service updated!':'Service added!','success'); closeServiceModal(); 
       });
     }
 
-    function confirmDeleteService(id,name){ document.getElementById('delete-svc-name').textContent=name; document.getElementById('delete-svc-modal').classList.add('active'); document.getElementById('confirm-delete-svc').onclick=async()=>{ if(MH.isAdminConfigured()){await MH.supabaseAdmin.from('services').delete().eq('id',id);}else{allAdminServices=allAdminServices.filter(x=>x.id!==id);saveServicesLocal();} MH.showToast('Service deleted','success'); document.getElementById('delete-svc-modal').classList.remove('active'); await loadAdminServices(); }; }
+    function confirmDeleteService(id,name){ 
+      document.getElementById('delete-svc-name').textContent=name; 
+      document.getElementById('delete-svc-modal').classList.add('active'); 
+      document.getElementById('confirm-delete-svc').onclick=async()=>{ 
+        if(MH.isSupabaseConfigured()){
+          await MH.supabase.from('services').delete().eq('id',id);
+        }
+        MH.showToast('Service deleted','success'); 
+        document.getElementById('delete-svc-modal').classList.remove('active'); 
+      }; 
+    }
   </script>
 </body>
 </html>

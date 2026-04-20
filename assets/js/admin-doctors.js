@@ -10,28 +10,35 @@ async function initAdminDoctors() {
   await loadAdminDoctors();
   initDoctorForm();
   initDoctorSearch();
+
+  // Setup Realtime
+  if (MH.isSupabaseConfigured()) {
+    MH.supabase.channel('public:doctors')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'doctors' }, () => {
+        loadAdminDoctors();
+      })
+      .subscribe();
+  }
 }
 
 // ── Load Doctors ──
 async function loadAdminDoctors() {
-  if (MH.isAdminConfigured()) {
+  if (MH.isSupabaseConfigured()) {
     try {
-      const { data, error } = await MH.supabaseAdmin.from('doctors').select('*').order('display_order');
-      if (!error && data) allDoctors = data;
-      else allDoctors = [...MH.SAMPLE_DOCTORS];
+      const { data, error } = await MH.supabase.from('doctors').select('*').order('display_order');
+      if (error) throw error;
+      allDoctors = data || [];
     } catch (e) {
-      allDoctors = [...MH.SAMPLE_DOCTORS];
+      console.error('Failed to load DB doctors:', e);
+      MH.showToast('Failed to load doctors: ' + e.message, 'error');
+      allDoctors = [];
     }
   } else {
-    const stored = localStorage.getItem('mh_doctors');
-    allDoctors = stored ? JSON.parse(stored) : [...MH.SAMPLE_DOCTORS];
+    console.warn('Supabase not configured. Operating with empty data.');
+    allDoctors = [];
   }
   renderDoctorsTable(allDoctors);
   updateDoctorCount();
-}
-
-function saveDoctorsLocal() {
-  localStorage.setItem('mh_doctors', JSON.stringify(allDoctors));
 }
 
 // ── Render Table ──
@@ -221,49 +228,36 @@ function initDoctorForm() {
 
       // Handle image upload
       const file = fileInput?.files[0];
-      if (file && MH.isAdminConfigured()) {
+      if (file && MH.isSupabaseConfigured()) {
         const filePath = `doctors/${Date.now()}-${file.name}`;
-        const { data: uploadData, error: uploadError } = await MH.supabaseAdmin.storage
+        const { data: uploadData, error: uploadError } = await MH.supabase.storage
           .from('clinic-images')
           .upload(filePath, file);
 
         if (!uploadError) {
-          const { data: { publicUrl } } = MH.supabaseAdmin.storage
+          const { data: { publicUrl } } = MH.supabase.storage
             .from('clinic-images')
             .getPublicUrl(filePath);
           doctorData.image_url = publicUrl;
           doctorData.image_path = filePath;
         }
-      } else if (file) {
-        // Demo: use data URL
-        doctorData.image_url = preview.src;
       }
 
-      if (MH.isAdminConfigured()) {
+      if (MH.isSupabaseConfigured()) {
         if (editingDoctorId) {
-          const { error } = await MH.supabaseAdmin.from('doctors').update(doctorData).eq('id', editingDoctorId);
+          const { error } = await MH.supabase.from('doctors').update(doctorData).eq('id', editingDoctorId);
           if (error) throw error;
         } else {
-          const { error } = await MH.supabaseAdmin.from('doctors').insert(doctorData);
+          const { error } = await MH.supabase.from('doctors').insert(doctorData);
           if (error) throw error;
         }
       } else {
-        // Local storage mode
-        if (editingDoctorId) {
-          const idx = allDoctors.findIndex(d => d.id === editingDoctorId);
-          if (idx !== -1) {
-            allDoctors[idx] = { ...allDoctors[idx], ...doctorData };
-          }
-        } else {
-          doctorData.id = Date.now();
-          allDoctors.push(doctorData);
-        }
-        saveDoctorsLocal();
+        throw new Error('Supabase not configured');
       }
 
       MH.showToast(editingDoctorId ? 'Doctor updated successfully!' : 'Doctor added successfully!', 'success');
       closeDoctorModal();
-      await loadAdminDoctors();
+      // await loadAdminDoctors(); -> Handled by realtime subscription now
     } catch (err) {
       MH.showToast('Error: ' + err.message, 'error');
     } finally {
@@ -288,22 +282,21 @@ function confirmDeleteDoctor(id, name) {
 
 async function deleteDoctor(id) {
   try {
-    if (MH.isAdminConfigured()) {
+    if (MH.isSupabaseConfigured()) {
       // Delete image from storage first
       const doc = allDoctors.find(d => d.id === id);
       if (doc?.image_path) {
-        await MH.supabaseAdmin.storage.from('clinic-images').remove([doc.image_path]);
+        await MH.supabase.storage.from('clinic-images').remove([doc.image_path]);
       }
-      const { error } = await MH.supabaseAdmin.from('doctors').delete().eq('id', id);
+      const { error } = await MH.supabase.from('doctors').delete().eq('id', id);
       if (error) throw error;
     } else {
-      allDoctors = allDoctors.filter(d => d.id !== id);
-      saveDoctorsLocal();
+      throw new Error('Supabase not configured');
     }
 
     MH.showToast('Doctor deleted successfully', 'success');
     document.getElementById('delete-modal').classList.remove('active');
-    await loadAdminDoctors();
+    // loadAdminDoctors handled by realtime
   } catch (err) {
     MH.showToast('Error deleting doctor: ' + err.message, 'error');
   }

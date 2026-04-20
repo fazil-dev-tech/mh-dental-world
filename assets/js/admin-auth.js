@@ -5,27 +5,38 @@
 
 // Check if user is authenticated, redirect if not
 async function requireAuth() {
-  const demoAuth = localStorage.getItem('mh_admin_demo');
-  if (!demoAuth) {
+  if (!MH.isSupabaseConfigured()) {
+    console.warn("Supabase is not configured.");
+    return null;
+  }
+  const { data: { session }, error } = await MH.supabase.auth.getSession();
+  if (error || !session) {
     window.location.href = 'login.html';
     return null;
   }
-  return { id: 'admin', email: 'adminmhdental' };
+  return session.user;
 }
 
 // Login
 async function adminLogin(email, password) {
-  // Always use local admin credentials
-  if (email === 'adminmhdental' && password === 'Admin123#') {
-    localStorage.setItem('mh_admin_demo', 'true');
-    return { success: true };
+  if (!MH.isSupabaseConfigured()) return { success: false, error: 'Supabase not configured' };
+  
+  const { data, error } = await MH.supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    return { success: false, error: error.message };
   }
-  return { success: false, error: 'Invalid username or password' };
+  return { success: true };
 }
 
 // Logout
 async function adminLogout() {
-  localStorage.removeItem('mh_admin_demo');
+  if (MH.isSupabaseConfigured()) {
+    await MH.supabase.auth.signOut();
+  }
   window.location.href = 'login.html';
 }
 

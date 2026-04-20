@@ -38,8 +38,8 @@
   --clr-gray-200:       #e5e5e5;
   --clr-gray-300:       #d4d4d4;
   --clr-gray-400:       #a3a3a3;
-  --clr-gray-500:       #737373;
-  --clr-gray-600:       #525252;
+  --clr-gray-500:       #5a5a5a;
+  --clr-gray-600:       #3f3f3f;
   --clr-gray-700:       #404040;
   --clr-gray-800:       #262626;
   --clr-gray-900:       #171717;
@@ -200,6 +200,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: var(--fw-bold);
   line-height: var(--lh-tight);
   color: var(--clr-gray-900);
+  letter-spacing: -0.01em;
 }
 
 h1 { font-size: var(--fs-5xl); }
@@ -256,7 +257,7 @@ p {
   font-weight: var(--fw-semibold);
   color: var(--clr-primary);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
   margin-bottom: var(--sp-4);
 }
 

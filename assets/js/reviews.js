@@ -45,6 +45,8 @@ const SAMPLE_REVIEWS = [
   }
 ];
 
+let reviewsSubscription = null;
+
 async function loadReviews(options = {}) {
   const { featured = false, limit = null, containerId = 'reviews-track', includePublic = false } = options;
   let reviews = [];
@@ -54,36 +56,24 @@ async function loadReviews(options = {}) {
       let query = MH.supabase.from('reviews').select('*').eq('approved', true).order('created_at', { ascending: false });
       if (featured) query = query.eq('featured', true);
       if (limit) query = query.limit(limit);
+      
       const { data, error } = await query;
-      if (!error && data?.length) reviews = data;
-      else reviews = [...SAMPLE_REVIEWS];
+      if (error) throw error;
+      reviews = data || [];
+      
+      // Setup Realtime Subscription
+      if (!reviewsSubscription) {
+        reviewsSubscription = MH.supabase.channel('public:reviews')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'reviews' }, () => {
+            loadReviews(options);
+          })
+          .subscribe();
+      }
     } catch (e) {
-      reviews = [...SAMPLE_REVIEWS];
+      console.error('Error fetching reviews:', e);
     }
   } else {
-    // Check if admin has saved custom reviews to localStorage
-    const stored = localStorage.getItem('mh_reviews');
-    if (stored) {
-      try {
-        reviews = JSON.parse(stored).filter(r => r.approved !== false);
-      } catch(e) {
-        reviews = [...SAMPLE_REVIEWS];
-      }
-    } else {
-      reviews = [...SAMPLE_REVIEWS];
-    }
-    if (featured) reviews = reviews.filter(r => r.featured);
-  }
-
-  // Merge user-submitted public reviews from localStorage
-  if (includePublic) {
-    const stored = localStorage.getItem('mh_public_reviews');
-    if (stored) {
-      try {
-        const publicReviews = JSON.parse(stored);
-        reviews = [...publicReviews, ...reviews];
-      } catch (e) { /* ignore parse errors */ }
-    }
+    console.warn('Supabase not configured. No reviews will be shown.');
   }
 
   if (limit) reviews = reviews.slice(0, limit);

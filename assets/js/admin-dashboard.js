@@ -4,19 +4,28 @@
 
 async function initAdminDashboard() {
   await loadDashboardStats();
+
+  if (MH.isSupabaseConfigured()) {
+    MH.supabase.channel('dashboard-changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'doctors' }, () => loadDashboardStats())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'services' }, () => loadDashboardStats())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'reviews' }, () => loadDashboardStats())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'gallery' }, () => loadDashboardStats())
+      .subscribe();
+  }
 }
 
 async function loadDashboardStats() {
   let stats = { doctors: 0, services: 0, reviews: 0, gallery: 0, pendingReviews: 0 };
 
-  if (MH.isAdminConfigured()) {
+  if (MH.isSupabaseConfigured()) {
     try {
       const [docs, svcs, revs, gal, pending] = await Promise.all([
-        MH.supabaseAdmin.from('doctors').select('id', { count: 'exact' }),
-        MH.supabaseAdmin.from('services').select('id', { count: 'exact' }),
-        MH.supabaseAdmin.from('reviews').select('id', { count: 'exact' }).eq('approved', true),
-        MH.supabaseAdmin.from('gallery').select('id', { count: 'exact' }),
-        MH.supabaseAdmin.from('reviews').select('id', { count: 'exact' }).eq('approved', false),
+        MH.supabase.from('doctors').select('*', { count: 'exact', head: true }),
+        MH.supabase.from('services').select('*', { count: 'exact', head: true }),
+        MH.supabase.from('reviews').select('*', { count: 'exact', head: true }).eq('approved', true),
+        MH.supabase.from('gallery').select('*', { count: 'exact', head: true }),
+        MH.supabase.from('reviews').select('*', { count: 'exact', head: true }).eq('approved', false),
       ]);
       stats.doctors = docs.count || 0;
       stats.services = svcs.count || 0;
@@ -24,15 +33,10 @@ async function loadDashboardStats() {
       stats.gallery = gal.count || 0;
       stats.pendingReviews = pending.count || 0;
     } catch (e) {
-      stats = { doctors: 3, services: 12, reviews: 8, gallery: 6, pendingReviews: 2 };
+      console.error('Error fetching dashboard stats:', e);
     }
   } else {
-    const storedDocs = localStorage.getItem('mh_doctors');
-    stats.doctors = storedDocs ? JSON.parse(storedDocs).length : 3;
-    stats.services = 12;
-    stats.reviews = 8;
-    stats.gallery = 6;
-    stats.pendingReviews = 2;
+    console.warn("Supabase not configured. Stats will be 0.");
   }
 
   // Update DOM

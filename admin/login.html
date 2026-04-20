@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Login — MH Dental World</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23DC3558'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-weight='800' font-family='serif'>MH</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23DC3558'/><text x='50%' y='55%' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-weight='800' font-family='serif'>MH</text></svg>">
   <link rel="stylesheet" href="../assets/css/main.css">
   <link rel="stylesheet" href="../assets/css/components.css">
   <link rel="stylesheet" href="../assets/css/animations.css">
   <link rel="stylesheet" href="../assets/css/admin.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
+  <!-- Supabase CDN must load BEFORE supabase-config.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <div class="admin-login-page">
@@ -25,8 +26,8 @@
 
       <form id="login-form">
         <div class="form-group">
-          <label class="form-label" for="login-email">Username</label>
-          <input type="text" class="form-input" id="login-email" placeholder="Enter your username" required autocomplete="username">
+          <label class="form-label" for="login-email">Email</label>
+          <input type="email" class="form-input" id="login-email" placeholder="admin@mhdentalworld.com" required autocomplete="username">
         </div>
         <div class="form-group">
           <label class="form-label" for="login-password">Password</label>
@@ -41,31 +42,35 @@
     </div>
   </div>
 
+  <script src="../assets/js/supabase-config.js"></script>
   <script>
-    // Self-contained login — works even if external scripts fail
-    document.getElementById('login-form').addEventListener('submit', function(e) {
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
       e.preventDefault();
-      
-      var errorEl = document.getElementById('login-error');
-      var submitBtn = document.getElementById('login-submit');
-      var email = document.getElementById('login-email').value.trim();
-      var password = document.getElementById('login-password').value;
+
+      const errorEl = document.getElementById('login-error');
+      const submitBtn = document.getElementById('login-submit');
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
 
       errorEl.style.display = 'none';
+      errorEl.classList.remove('show');
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Signing in...';
+      submitBtn.innerHTML = '<span class="spinner" style="width:18px;height:18px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:8px"></span> Signing in...';
 
-      // Demo mode credentials
-      if (email === 'adminmhdental' && password === 'Admin123#') {
-        localStorage.setItem('mh_admin_demo', 'true');
-        // Redirect to dashboard
+      try {
+        if (!MH.isSupabaseConfigured()) {
+          throw new Error('Database not connected. Please check configuration.');
+        }
+
+        const { data, error } = await MH.supabase.auth.signInWithPassword({ email, password });
+
+        if (error) throw error;
+
+        // Successful login — redirect to dashboard
         window.location.href = 'dashboard.html';
-        // Fallback: if redirect doesn't work within 2s, force it
-        setTimeout(function() {
-          window.location.replace('dashboard.html');
-        }, 2000);
-      } else {
-        errorEl.textContent = 'Invalid username or password';
+
+      } catch (err) {
+        errorEl.textContent = err.message || 'Invalid email or password.';
         errorEl.style.display = 'block';
         errorEl.classList.add('show');
         submitBtn.disabled = false;

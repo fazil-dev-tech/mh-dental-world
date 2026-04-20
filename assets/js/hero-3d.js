@@ -9,8 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // 1. Setup Scene, Camera, Renderer
   const scene = new THREE.Scene();
   
+  const isMobile = window.innerWidth <= 768;
   const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
-  camera.position.set(0, 0, 9.5); // Zooms out optimally so the whole tooth is gracefully framed
+  camera.position.set(0, 0, isMobile ? 12 : 9.5); // Zooms out optimally so the whole tooth is gracefully framed
 
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, logarithmicDepthBuffer: true });
   const width = container.clientWidth || 500;
@@ -69,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   toothGroup.rotation.x = 0.2;
   toothGroup.rotation.y = -0.4;
-  toothGroup.position.y = 1.8; // Shifted massively UPWARDS into the empty space
+  toothGroup.position.y = isMobile ? 0.8 : 1.5; // Adjusted down for responsive framing
   scene.add(toothGroup);
 
   // 3. Dynamic Ambient Particles
@@ -123,8 +124,8 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(animate);
     
     const elapsedTime = clock.getElapsedTime();
-
-    toothGroup.position.y = 1.8 + Math.sin(elapsedTime * 2.0) * 0.25; // Base shifted upwards to 1.8
+    const baseY = window.innerWidth <= 768 ? 0.5 : 1.2;
+    toothGroup.position.y = baseY + Math.sin(elapsedTime * 2.0) * 0.25; // Base shifted dynamically
     toothGroup.rotation.y += 0.02; 
 
     targetX = mouseX * 0.8;

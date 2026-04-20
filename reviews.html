@@ -99,7 +99,7 @@
           <div id="review-success" style="display:none;text-align:center;padding:var(--sp-8) 0">
             <div style="font-size:64px;margin-bottom:var(--sp-4);animation:slideUp 0.5s ease-out;">🎉</div>
             <h3 style="margin-bottom:var(--sp-2)">Review Published!</h3>
-            <p style="color:var(--clr-gray-500)">Thank you. It has been saved and is now visible below to help others trust MH Dental World.</p>
+            <p style="color:var(--clr-gray-500)">Thank you. It has been saved and will be visible once approved by our clinic staff.</p>
             <button class="btn btn-ghost" id="write-another-btn" style="margin-top:var(--sp-6);border:1px solid var(--clr-gray-200);">Write Another Review</button>
           </div>
         </div>
@@ -126,7 +126,7 @@
 
     async function loadReviewsSafe() {
       try {
-        await MH.loadReviews({ containerId: 'reviews-grid', includePublic: true });
+        await MH.loadReviews({ containerId: 'reviews-grid', includePublic: false });
       } catch(e) { console.warn('Reviews load error:', e); }
       try { initScrollReveal(); } catch(e) {}
     }
@@ -210,25 +210,21 @@
               treatment: reviewData.treatment,
               rating: reviewData.rating,
               review_text: reviewData.review_text,
-              approved: true, featured: false
+              approved: false, // Professional standard: Needs admin approval
+              featured: false
             });
             if (error) throw error;
+          } else {
+            throw new Error('Database connection missing. Cannot save review.');
           }
-
-          // Save to localStorage
-          const stored = localStorage.getItem('mh_public_reviews');
-          const publicReviews = stored ? JSON.parse(stored) : [];
-          publicReviews.unshift(reviewData);
-          localStorage.setItem('mh_public_reviews', JSON.stringify(publicReviews));
 
           // Show success
           form.style.display = 'none';
           successDiv.style.display = 'block';
-          try { MH.showToast('Review published! Thank you! 🎉', 'success'); } catch(e) {}
-
+          try { MH.showToast('Review submitted! It will appear after approval.', 'success'); } catch(e) {}
           // Re-render reviews grid
           try {
-            await MH.loadReviews({ containerId: 'reviews-grid', includePublic: true });
+            await MH.loadReviews({ containerId: 'reviews-grid', includePublic: false });
             const grid = document.getElementById('reviews-grid');
             if (grid) Array.from(grid.children).forEach(c => c.style.opacity = '1');
           } catch(e) {}

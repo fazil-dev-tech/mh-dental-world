@@ -70,18 +70,27 @@
     let allFAQs=[], editingFaqId=null;
     document.addEventListener('DOMContentLoaded',async()=>{
       const u=await MH.requireAuth();if(!u)return;MH.initAdminSidebar();await loadFAQs();
+      
+      if (MH.isSupabaseConfigured()) {
+        MH.supabase.channel('admin:faqs')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'faqs' }, () => {
+            loadFAQs();
+          })
+          .subscribe();
+      }
+
       document.getElementById('faq-form').addEventListener('submit',async e=>{
         e.preventDefault();
         const d={question:document.getElementById('faq-q').value.trim(),answer:document.getElementById('faq-a').value.trim(),category:document.getElementById('faq-cat').value,display_order:parseInt(document.getElementById('faq-order').value)||1,active:document.getElementById('faq-active').checked};
         if(!d.question||!d.answer){MH.showToast('Question & answer required','error');return;}
-        if(MH.isAdminConfigured()){try{if(editingFaqId){await MH.supabaseAdmin.from('faqs').update(d).eq('id',editingFaqId);}else{await MH.supabaseAdmin.from('faqs').insert(d);}}catch(err){MH.showToast(err.message,'error');return;}}
-        else{if(editingFaqId){const i=allFAQs.findIndex(x=>x.id===editingFaqId);if(i!==-1)allFAQs[i]={...allFAQs[i],...d};}else{d.id=Date.now();allFAQs.push(d);}localStorage.setItem('mh_faqs',JSON.stringify(allFAQs));}
-        MH.showToast(editingFaqId?'FAQ updated!':'FAQ added!','success');closeFaqModal();await loadFAQs();
+        if(MH.isSupabaseConfigured()){try{if(editingFaqId){await MH.supabase.from('faqs').update(d).eq('id',editingFaqId);}else{await MH.supabase.from('faqs').insert(d);}}catch(err){MH.showToast(err.message,'error');return;}}
+        else{MH.showToast('Supabase not configured','error');return;}
+        MH.showToast(editingFaqId?'FAQ updated!':'FAQ added!','success');closeFaqModal();
       });
     });
     async function loadFAQs(){
-      if(MH.isAdminConfigured()){try{const{data}=await MH.supabaseAdmin.from('faqs').select('*').order('display_order');allFAQs=data||[];}catch(e){allFAQs=[...SAMPLE_FAQS];}}
-      else{const s=localStorage.getItem('mh_faqs');allFAQs=s?JSON.parse(s):[...SAMPLE_FAQS];}
+      if(MH.isSupabaseConfigured()){try{const{data}=await MH.supabase.from('faqs').select('*').order('display_order');allFAQs=data||[];}catch(e){allFAQs=[];}}
+      else{allFAQs=[];}
       renderFAQTable();document.getElementById('faq-count').textContent=allFAQs.length;
     }
     function renderFAQTable(){
@@ -98,7 +107,7 @@
     function openAddFAQ(){editingFaqId=null;document.getElementById('faq-form').reset();document.getElementById('faq-modal-title').textContent='Add FAQ';document.getElementById('faq-modal').classList.add('active');}
     function openEditFAQ(id){const f=allFAQs.find(x=>x.id===id);if(!f)return;editingFaqId=id;document.getElementById('faq-modal-title').textContent='Edit FAQ';document.getElementById('faq-q').value=f.question;document.getElementById('faq-a').value=f.answer;document.getElementById('faq-cat').value=f.category||'general';document.getElementById('faq-order').value=f.display_order||'';document.getElementById('faq-active').checked=f.active!==false;document.getElementById('faq-modal').classList.add('active');}
     function closeFaqModal(){document.getElementById('faq-modal').classList.remove('active');editingFaqId=null;}
-    async function deleteFAQ(id){if(!confirm('Delete this FAQ?'))return;if(MH.isAdminConfigured()){await MH.supabaseAdmin.from('faqs').delete().eq('id',id);}else{allFAQs=allFAQs.filter(x=>x.id!==id);localStorage.setItem('mh_faqs',JSON.stringify(allFAQs));}MH.showToast('FAQ deleted','success');await loadFAQs();}
+    async function deleteFAQ(id){if(!confirm('Delete this FAQ?'))return;if(MH.isSupabaseConfigured()){await MH.supabase.from('faqs').delete().eq('id',id);}MH.showToast('FAQ deleted','success');}
   </script>
 </body>
 </html>

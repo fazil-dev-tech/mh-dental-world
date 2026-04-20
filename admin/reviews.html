@@ -94,19 +94,31 @@
     document.addEventListener('DOMContentLoaded', async()=>{
       const user=await MH.requireAuth(); if(!user)return; MH.initAdminSidebar(); await loadAdminReviews();
       document.getElementById('review-search').addEventListener('input',e=>{const t=e.target.value.toLowerCase();renderReviewsTable(allAdminReviews.filter(r=>(r.patient_name||'').toLowerCase().includes(t)||(r.treatment||'').toLowerCase().includes(t)));});
+      
+      if (MH.isSupabaseConfigured()) {
+        MH.supabase.channel('admin:reviews')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'reviews' }, () => {
+            loadAdminReviews();
+          })
+          .subscribe();
+      }
+
       document.getElementById('review-form').addEventListener('submit',async e=>{
         e.preventDefault();
         const d={patient_name:document.getElementById('rev-name').value.trim(),treatment:document.getElementById('rev-treatment').value.trim(),rating:parseInt(document.getElementById('rev-rating').value),review_text:document.getElementById('rev-text').value.trim(),approved:document.getElementById('rev-approved').checked,featured:document.getElementById('rev-featured').checked};
         if(!d.patient_name||!d.review_text){MH.showToast('Name & review required','error');return;}
-        if(MH.isAdminConfigured()){try{if(editingRevId){await MH.supabaseAdmin.from('reviews').update(d).eq('id',editingRevId);}else{await MH.supabaseAdmin.from('reviews').insert(d);}}catch(err){MH.showToast(err.message,'error');return;}}
-        else{if(editingRevId){const i=allAdminReviews.findIndex(x=>x.id===editingRevId);if(i!==-1)allAdminReviews[i]={...allAdminReviews[i],...d};}else{d.id=Date.now();allAdminReviews.push(d);}localStorage.setItem('mh_reviews',JSON.stringify(allAdminReviews));}
-        MH.showToast(editingRevId?'Review updated!':'Review added!','success'); closeReviewModal(); await loadAdminReviews();
+        if(MH.isSupabaseConfigured()){
+           try{if(editingRevId){await MH.supabase.from('reviews').update(d).eq('id',editingRevId);}else{await MH.supabase.from('reviews').insert(d);}}catch(err){MH.showToast(err.message,'error');return;}
+        } else {
+           MH.showToast('Supabase not configured','error');return;
+        }
+        MH.showToast(editingRevId?'Review updated!':'Review added!','success'); closeReviewModal();
       });
     });
 
     async function loadAdminReviews(){
-      if(MH.isAdminConfigured()){try{const{data}=await MH.supabaseAdmin.from('reviews').select('*').order('created_at',{ascending:false});allAdminReviews=data||[];}catch(e){allAdminReviews=[...MH.SAMPLE_REVIEWS];}}
-      else{const s=localStorage.getItem('mh_reviews');allAdminReviews=s?JSON.parse(s):[...MH.SAMPLE_REVIEWS];}
+      if(MH.isSupabaseConfigured()){try{const{data}=await MH.supabase.from('reviews').select('*').order('created_at',{ascending:false});allAdminReviews=data||[];}catch(e){allAdminReviews=[];}}
+      else{allAdminReviews=[];}
       renderReviewsTable(allAdminReviews); document.getElementById('reviews-count').textContent=allAdminReviews.length;
     }
 
@@ -127,7 +139,7 @@
     function openAddReview(){editingRevId=null;document.getElementById('review-form').reset();document.getElementById('review-modal-title').textContent='Add Review';document.getElementById('review-modal').classList.add('active');}
     function openEditReview(id){const r=allAdminReviews.find(x=>x.id===id);if(!r)return;editingRevId=id;document.getElementById('review-modal-title').textContent='Edit Review';document.getElementById('rev-name').value=r.patient_name||'';document.getElementById('rev-treatment').value=r.treatment||'';document.getElementById('rev-rating').value=r.rating||5;document.getElementById('rev-text').value=r.review_text||'';document.getElementById('rev-approved').checked=r.approved!==false;document.getElementById('rev-featured').checked=r.featured===true;document.getElementById('review-modal').classList.add('active');}
     function closeReviewModal(){document.getElementById('review-modal').classList.remove('active');editingRevId=null;}
-    function confirmDeleteReview(id,name){document.getElementById('delete-rev-name').textContent=name;document.getElementById('delete-rev-modal').classList.add('active');document.getElementById('confirm-delete-rev').onclick=async()=>{if(MH.isAdminConfigured()){await MH.supabaseAdmin.from('reviews').delete().eq('id',id);}else{allAdminReviews=allAdminReviews.filter(x=>x.id!==id);localStorage.setItem('mh_reviews',JSON.stringify(allAdminReviews));}MH.showToast('Review deleted','success');document.getElementById('delete-rev-modal').classList.remove('active');await loadAdminReviews();};}
+    function confirmDeleteReview(id,name){document.getElementById('delete-rev-name').textContent=name;document.getElementById('delete-rev-modal').classList.add('active');document.getElementById('confirm-delete-rev').onclick=async()=>{if(MH.isSupabaseConfigured()){await MH.supabase.from('reviews').delete().eq('id',id);}MH.showToast('Review deleted','success');document.getElementById('delete-rev-modal').classList.remove('active');};}
   </script>
 </body>
 </html>

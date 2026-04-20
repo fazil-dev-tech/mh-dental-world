@@ -78,11 +78,11 @@
 
   /* Navbar mobile */
   .nav-links {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
+    height: 100vh;
     background: var(--clr-white);
     flex-direction: column;
     justify-content: center;
@@ -90,7 +90,7 @@
     padding: var(--sp-10);
     transform: translateX(100%);
     transition: transform var(--duration-normal) var(--ease-out);
-    z-index: 5;
+    z-index: -1;
   }
 
   .nav-links.open {

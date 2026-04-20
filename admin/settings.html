@@ -90,8 +90,13 @@
     document.addEventListener('DOMContentLoaded',async()=>{
       const u=await MH.requireAuth();if(!u)return;MH.initAdminSidebar();
       const status=document.getElementById('supabase-status');
-      if(MH.isAdminConfigured()){status.textContent='✅ Connected';status.style.color='var(--clr-success)';}
-      else{status.textContent='⚠️ Not Connected (Demo Mode)';status.style.color='var(--clr-warning)';}
+      if(MH.isSupabaseConfigured()){
+        status.textContent='✅ Connected';
+        status.style.color='var(--clr-success)';
+        document.getElementById('set-sb-url').value = MH.SUPABASE_URL;
+        document.getElementById('set-sb-key').value = '******** (Configured in Code) ********';
+      }
+      else{status.textContent='⚠️ Not Connected (Database settings incomplete)';status.style.color='var(--clr-warning)';}
       loadSettings();
     });
     function loadSettings(){const s=localStorage.getItem('mh_settings');if(s){const d=JSON.parse(s);Object.entries(d).forEach(([k,v])=>{const el=document.getElementById('set-'+k);if(el){if(el.tagName==='TEXTAREA')el.textContent=v;else el.value=v;}});}}

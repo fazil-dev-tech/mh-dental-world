@@ -96,6 +96,8 @@ const SAMPLE_SERVICES = [
   }
 ];
 
+let servicesSubscription = null;
+
 async function loadServices(options = {}) {
   const { featured = false, limit = null, containerId = 'services-grid' } = options;
   let services = [];
@@ -105,26 +107,23 @@ async function loadServices(options = {}) {
       let query = MH.supabase.from('services').select('*').eq('active', true).order('display_order');
       if (featured) query = query.eq('featured', true);
       if (limit) query = query.limit(limit);
+      
       const { data, error } = await query;
-      if (!error && data) services = data;
-      else services = SAMPLE_SERVICES;
+      if (error) throw error;
+      services = data || [];
+      
+      if (!servicesSubscription) {
+        servicesSubscription = MH.supabase.channel('public:services')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'services' }, () => {
+            loadServices(options);
+          })
+          .subscribe();
+      }
     } catch (e) {
-      services = SAMPLE_SERVICES;
+      console.error('Error fetching services:', e);
     }
   } else {
-    // Check if admin has saved custom services to localStorage
-    const stored = localStorage.getItem('mh_services');
-    if (stored) {
-      try {
-        services = JSON.parse(stored).filter(s => s.active !== false);
-      } catch(e) {
-        services = [...SAMPLE_SERVICES];
-      }
-    } else {
-      services = [...SAMPLE_SERVICES];
-    }
-    if (featured) services = services.filter(s => s.featured);
-    if (limit) services = services.slice(0, limit);
+    console.warn('Supabase not configured. No services will be shown.');
   }
 
   const container = document.getElementById(containerId);

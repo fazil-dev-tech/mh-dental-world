@@ -65,6 +65,8 @@ const SAMPLE_DOCTORS = [
 ];
 
 // Load doctors for public pages
+let doctorsSubscription = null;
+
 async function loadDoctors(options = {}) {
   const { featured = false, limit = null, containerId = 'doctors-grid' } = options;
 
@@ -82,26 +84,21 @@ async function loadDoctors(options = {}) {
       if (limit) query = query.limit(limit);
 
       const { data, error } = await query;
-      if (!error && data) doctors = data;
-      else doctors = SAMPLE_DOCTORS;
+      if (error) throw error;
+      doctors = data || [];
+      
+      if (!doctorsSubscription) {
+        doctorsSubscription = MH.supabase.channel('public:doctors')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'doctors' }, () => {
+            loadDoctors(options);
+          })
+          .subscribe();
+      }
     } catch (e) {
-      console.warn('Using sample doctor data', e);
-      doctors = SAMPLE_DOCTORS;
+      console.error('Error fetching doctors:', e);
     }
   } else {
-    // Check if admin has saved custom doctors to localStorage
-    const stored = localStorage.getItem('mh_doctors');
-    if (stored) {
-      try {
-        doctors = JSON.parse(stored).filter(d => d.active !== false);
-      } catch(e) {
-        doctors = [...SAMPLE_DOCTORS];
-      }
-    } else {
-      doctors = [...SAMPLE_DOCTORS];
-    }
-    if (featured) doctors = doctors.filter(d => d.featured);
-    if (limit) doctors = doctors.slice(0, limit);
+    console.warn('Supabase not configured. No doctors will be shown.');
   }
 
   const container = document.getElementById(containerId);
@@ -150,21 +147,7 @@ async function loadDoctorDetail(doctorId) {
         .single();
       if (!error && data) doctor = data;
     } catch (e) {
-      console.warn('Fallback to sample data', e);
-    }
-  }
-
-  if (!doctor) {
-    // Check localStorage for admin-added doctors
-    const stored = localStorage.getItem('mh_doctors');
-    if (stored) {
-      try {
-        const allDocs = JSON.parse(stored);
-        doctor = allDocs.find(d => d.id == doctorId);
-      } catch(e) {}
-    }
-    if (!doctor) {
-      doctor = SAMPLE_DOCTORS.find(d => d.id == doctorId) || SAMPLE_DOCTORS[0];
+      console.error('Error fetching doctor detail:', e);
     }
   }
 

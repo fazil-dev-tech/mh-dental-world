@@ -18,6 +18,8 @@ const SAMPLE_GALLERY = [
   { id: 9, title: 'Braces & Aligners', category: 'treatments', image_url: 'assets/images/services/braces-aligners-featured.png', alt: 'Orthodontic braces and aligners treatment' }
 ];
 
+let gallerySubscription = null;
+
 async function loadGallery(options = {}) {
   const { category = null, containerId = 'gallery-grid' } = options;
   let gallery = [];
@@ -25,25 +27,24 @@ async function loadGallery(options = {}) {
   if (MH.isSupabaseConfigured()) {
     try {
       let query = MH.supabase.from('gallery').select('*').order('display_order');
-      if (category) query = query.eq('category', category);
+      if (category && category !== 'all') query = query.eq('category', category);
+      
       const { data, error } = await query;
-      if (!error && data?.length) gallery = data;
-      else gallery = SAMPLE_GALLERY;
+      if (error) throw error;
+      gallery = data || [];
+
+      if (!gallerySubscription) {
+        gallerySubscription = MH.supabase.channel('public:gallery')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'gallery' }, () => {
+            loadGallery(options);
+          })
+          .subscribe();
+      }
     } catch (e) {
-      gallery = SAMPLE_GALLERY;
+      console.error('Error fetching gallery:', e);
     }
   } else {
-    // PREVENT BLANK SCREEN: Always fallback to default gallery if local storage is cleared
-    const stored = localStorage.getItem('mh_gallery');
-    const localDb = stored ? JSON.parse(stored) : [];
-    
-    if (localDb.length > 0) {
-      gallery = localDb;
-    } else {
-      gallery = [...SAMPLE_GALLERY];
-    }
-    
-    if (category && category !== 'all') gallery = gallery.filter(g => g.category === category);
+    console.warn('Supabase not configured, gallery will be empty.');
   }
 
   const container = document.getElementById(containerId);
