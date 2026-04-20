@@ -171,14 +171,6 @@
     min-width: 100%;
   }
 
-  /* Mobile CTA */
-  .mobile-sticky-cta {
-    display: flex;
-  }
-
-  .floating-whatsapp {
-    display: none;
-  }
 
   /* Page header */
   .page-header {
