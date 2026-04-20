@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — MH Dental World Admin</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8627c'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-weight='800' font-family='serif'>MH</text></svg>">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="sidebar-brand">
+        <div class="sb-icon">MH</div>
+        <div class="sb-text">
+          <h3>MH Dental World</h3>
+          <span>Admin Portal</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="dashboard.html" class="sidebar-link active"><span class="link-icon">📊</span> Dashboard</a>
+        <div class="sidebar-section-label">Content Management</div>
+        <a href="doctors.html" class="sidebar-link"><span class="link-icon">👨‍⚕️</span> Doctors</a>
+        <a href="services.html" class="sidebar-link"><span class="link-icon">🦷</span> Services</a>
+        <a href="reviews.html" class="sidebar-link"><span class="link-icon">⭐</span> Reviews</a>
+        <a href="gallery.html" class="sidebar-link"><span class="link-icon">🖼️</span> Gallery</a>
+        <a href="banners.html" class="sidebar-link"><span class="link-icon">🎯</span> Hero & Banners</a>
+        <a href="faqs.html" class="sidebar-link"><span class="link-icon">❓</span> FAQs</a>
+        <div class="sidebar-section-label">Settings</div>
+        <a href="contact.html" class="sidebar-link"><span class="link-icon">📞</span> Contact Info</a>
+        <a href="settings.html" class="sidebar-link"><span class="link-icon">⚙️</span> Clinic Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar">A</div>
+          <div class="user-info">
+            <div class="user-name">Admin</div>
+            <div class="user-role">Super Admin</div>
+          </div>
+          <button class="sidebar-logout" id="admin-logout" title="Logout">🚪</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+          <div>
+            <h2>Dashboard</h2>
+            <span class="topbar-breadcrumb">Welcome back, Admin</span>
+          </div>
+        </div>
+        <a href="../index.html" target="_blank" class="btn btn-ghost btn-sm">🌐 View Website</a>
+      </header>
+
+      <div class="admin-content">
+        <!-- Stats Cards -->
+        <div class="dash-cards">
+          <div class="dash-card">
+            <div class="dc-header">
+              <div class="dc-icon">👨‍⚕️</div>
+            </div>
+            <div class="dc-value" id="dash-doctors">0</div>
+            <div class="dc-label">Doctors</div>
+          </div>
+          <div class="dash-card">
+            <div class="dc-header">
+              <div class="dc-icon" style="background:rgba(20,184,166,0.1);color:#14b8a6">🦷</div>
+            </div>
+            <div class="dc-value" id="dash-services">0</div>
+            <div class="dc-label">Services</div>
+          </div>
+          <div class="dash-card">
+            <div class="dc-header">
+              <div class="dc-icon" style="background:rgba(245,158,11,0.1);color:#f59e0b">⭐</div>
+            </div>
+            <div class="dc-value" id="dash-reviews">0</div>
+            <div class="dc-label">Reviews</div>
+          </div>
+          <div class="dash-card">
+            <div class="dc-header">
+              <div class="dc-icon" style="background:rgba(59,130,246,0.1);color:#3b82f6">🖼️</div>
+            </div>
+            <div class="dc-value" id="dash-gallery">0</div>
+            <div class="dc-label">Gallery Items</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="admin-table-wrapper" style="margin-bottom:var(--sp-8)">
+          <div class="admin-table-header">
+            <h3>Quick Actions</h3>
+          </div>
+          <div style="padding:var(--sp-6)">
+            <div class="quick-actions">
+              <a href="doctors.html" class="quick-action-btn"><div class="qa-icon">👨‍⚕️</div><div class="qa-label">Manage Doctors</div></a>
+              <a href="services.html" class="quick-action-btn"><div class="qa-icon">🦷</div><div class="qa-label">Manage Services</div></a>
+              <a href="reviews.html" class="quick-action-btn"><div class="qa-icon">⭐</div><div class="qa-label">Manage Reviews</div></a>
+              <a href="gallery.html" class="quick-action-btn"><div class="qa-icon">🖼️</div><div class="qa-label">Manage Gallery</div></a>
+              <a href="banners.html" class="quick-action-btn"><div class="qa-icon">🎯</div><div class="qa-label">Edit Banners</div></a>
+              <a href="settings.html" class="quick-action-btn"><div class="qa-icon">⚙️</div><div class="qa-label">Clinic Settings</div></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="admin-table-wrapper">
+          <div class="admin-table-header">
+            <h3>Overview</h3>
+          </div>
+          <div style="padding:var(--sp-6)">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-6)">
+              <div style="padding:var(--sp-5);background:var(--clr-blush);border-radius:var(--radius-lg)">
+                <h4 style="font-family:var(--ff-accent);font-size:var(--fs-sm);margin-bottom:var(--sp-2)">📋 Pending Reviews</h4>
+                <div style="font-size:var(--fs-3xl);font-weight:800;font-family:var(--ff-heading);color:var(--clr-primary)" id="dash-pending">0</div>
+                <a href="reviews.html" style="font-size:var(--fs-xs);color:var(--clr-primary);font-weight:600">Review now →</a>
+              </div>
+              <div style="padding:var(--sp-5);background:var(--clr-pale-pink);border-radius:var(--radius-lg)">
+                <h4 style="font-family:var(--ff-accent);font-size:var(--fs-sm);margin-bottom:var(--sp-2)">🌐 Website Status</h4>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:var(--sp-3)">
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--clr-success)"></div>
+                  <span style="font-size:var(--fs-sm);font-weight:600;color:var(--clr-gray-800)">Live & Running</span>
+                </div>
+                <a href="../index.html" target="_blank" style="font-size:var(--fs-xs);color:var(--clr-primary);font-weight:600;margin-top:8px;display:block">View site →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../assets/js/supabase-config.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/admin-auth.js"></script>
+  <script src="../assets/js/admin-dashboard.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await MH.requireAuth();
+      if (!user) return;
+      MH.initAdminSidebar();
+      await MH.initAdminDashboard();
+    });
+  </script>
+</body>
+</html>

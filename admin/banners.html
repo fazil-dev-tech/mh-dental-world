@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero & Banners — MH Dental World Admin</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8627c'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-weight='800' font-family='serif'>MH</text></svg>">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="sidebar-brand"><div class="sb-icon">MH</div><div class="sb-text"><h3>MH Dental World</h3><span>Admin Portal</span></div></div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div><a href="dashboard.html" class="sidebar-link"><span class="link-icon">📊</span> Dashboard</a>
+        <div class="sidebar-section-label">Content Management</div><a href="doctors.html" class="sidebar-link"><span class="link-icon">👨‍⚕️</span> Doctors</a><a href="services.html" class="sidebar-link"><span class="link-icon">🦷</span> Services</a><a href="reviews.html" class="sidebar-link"><span class="link-icon">⭐</span> Reviews</a><a href="gallery.html" class="sidebar-link"><span class="link-icon">🖼️</span> Gallery</a><a href="banners.html" class="sidebar-link active"><span class="link-icon">🎯</span> Hero & Banners</a><a href="faqs.html" class="sidebar-link"><span class="link-icon">❓</span> FAQs</a>
+        <div class="sidebar-section-label">Settings</div><a href="contact.html" class="sidebar-link"><span class="link-icon">📞</span> Contact Info</a><a href="settings.html" class="sidebar-link"><span class="link-icon">⚙️</span> Clinic Settings</a>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar">A</div><div class="user-info"><div class="user-name">Admin</div><div class="user-role">Super Admin</div></div><button class="sidebar-logout" id="admin-logout">🚪</button></div></div>
+    </aside>
+    <main class="admin-main">
+      <header class="admin-topbar"><div class="topbar-left"><button class="sidebar-toggle" id="sidebar-toggle">☰</button><div><h2>Hero & Banners</h2><span class="topbar-breadcrumb">Manage homepage hero section and promotional banners</span></div></div><button class="btn btn-primary btn-sm" onclick="saveHeroSettings()">💾 Save Changes</button></header>
+      <div class="admin-content">
+        <!-- Hero Section -->
+        <div class="admin-table-wrapper" style="margin-bottom:var(--sp-8)">
+          <div class="admin-table-header"><h3>🎯 Homepage Hero Section</h3></div>
+          <div style="padding:var(--sp-6)">
+            <div class="form-group"><label class="form-label">Hero Title</label><input type="text" class="form-input" id="hero-title" value="Your Smile Deserves World-Class Dental Care"></div>
+            <div class="form-group"><label class="form-label">Hero Subtitle</label><textarea class="form-textarea" id="hero-subtitle" style="min-height:70px">Experience premium dentistry with cutting-edge technology, gentle experts, and a luxurious healing environment. Your perfect smile journey starts here.</textarea></div>
+            <div class="form-group"><label class="form-label">Hero Badge Text</label><input type="text" class="form-input" id="hero-badge" value="Now Open — Welcoming New Patients"></div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Primary CTA Text</label><input type="text" class="form-input" id="hero-cta1" value="📞 Call Now"></div>
+              <div class="form-group"><label class="form-label">Secondary CTA Text</label><input type="text" class="form-input" id="hero-cta2" value="💬 WhatsApp Us"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Hero Image</label>
+              <div style="display:flex;gap:var(--sp-4);align-items:center">
+                <img src="../assets/images/gallery/reception.jpeg" alt="Hero" style="width:200px;height:120px;object-fit:cover;border-radius:var(--radius-lg)">
+                <div><p style="font-size:var(--fs-xs);color:var(--clr-gray-400)">Current hero image.<br>Upload a new image via the Gallery page and update the path here.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="admin-table-wrapper" style="margin-bottom:var(--sp-8)">
+          <div class="admin-table-header"><h3>📊 Stats Counter</h3></div>
+          <div style="padding:var(--sp-6)">
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Happy Patients</label><input type="number" class="form-input" id="stat-patients" value="5000"></div>
+              <div class="form-group"><label class="form-label">Treatments Offered</label><input type="number" class="form-input" id="stat-treatments" value="12"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Years of Experience</label><input type="number" class="form-input" id="stat-years" value="10"></div>
+              <div class="form-group"><label class="form-label">Patient Satisfaction %</label><input type="number" class="form-input" id="stat-satisfaction" value="98"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="admin-table-wrapper">
+          <div class="admin-table-header"><h3>🛡️ Trust Badges</h3></div>
+          <div style="padding:var(--sp-6)">
+            <p style="font-size:var(--fs-sm);color:var(--clr-gray-400);margin-bottom:var(--sp-4)">Edit the trust badges shown below the hero section.</p>
+            <div id="trust-badges-list">
+              <div class="form-row" style="margin-bottom:var(--sp-3)"><div class="form-group"><input class="form-input" value="🛡️ 100% Sterilization"></div><div class="form-group"><input class="form-input" value="🏥 Advanced Equipment"></div></div>
+              <div class="form-row" style="margin-bottom:var(--sp-3)"><div class="form-group"><input class="form-input" value="👨‍⚕️ Expert Specialists"></div><div class="form-group"><input class="form-input" value="💯 Painless Procedures"></div></div>
+              <div class="form-row"><div class="form-group"><input class="form-input" value="🕐 Flexible Timings"></div><div class="form-group"><input class="form-input" value="👨‍👩‍👧‍👦 Family Friendly"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/supabase-config.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/admin-auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded',async()=>{const u=await MH.requireAuth();if(!u)return;MH.initAdminSidebar();loadHeroSettings();});
+    function loadHeroSettings(){const s=localStorage.getItem('mh_hero');if(s){const d=JSON.parse(s);if(d.title)document.getElementById('hero-title').value=d.title;if(d.subtitle)document.getElementById('hero-subtitle').value=d.subtitle;if(d.badge)document.getElementById('hero-badge').value=d.badge;}}
+    function saveHeroSettings(){const d={title:document.getElementById('hero-title').value,subtitle:document.getElementById('hero-subtitle').value,badge:document.getElementById('hero-badge').value,cta1:document.getElementById('hero-cta1').value,cta2:document.getElementById('hero-cta2').value,patients:document.getElementById('stat-patients').value,treatments:document.getElementById('stat-treatments').value,years:document.getElementById('stat-years').value,satisfaction:document.getElementById('stat-satisfaction').value};localStorage.setItem('mh_hero',JSON.stringify(d));MH.showToast('Hero settings saved!','success');}
+  </script>
+</body>
+</html>

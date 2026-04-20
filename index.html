@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MH Dental World — Premium Advanced Dental Care</title>
+  <meta name="description" content="MH Dental World offers world-class dental care with advanced technology, expert dentists, and a luxurious clinic experience. Teeth cleaning, implants, braces, cosmetic dentistry & more.">
+  <meta name="keywords" content="dental clinic, dentist, dental implants, braces, teeth whitening, cosmetic dentistry, root canal, MH Dental World">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23DC3558'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-weight='800' font-family='serif'>MH</text></svg>">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="assets/css/main.css?v=2">
+  <link rel="stylesheet" href="assets/css/components.css?v=2">
+  <link rel="stylesheet" href="assets/css/animations.css?v=2">
+  <link rel="stylesheet" href="assets/css/responsive.css?v=2">
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- ═══════════ NAVBAR ═══════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-brand">
+        <div class="logo-icon">MH</div>
+        <div class="brand-text">
+          <span class="brand-name">MH Dental World</span>
+          <span class="brand-tagline">Advanced Dental Care</span>
+        </div>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="services.html" class="nav-link">Services</a>
+        <a href="doctors.html" class="nav-link">Our Doctors</a>
+        <a href="gallery.html" class="nav-link">Gallery</a>
+        <a href="reviews.html" class="nav-link">Reviews</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <div class="nav-cta">
+          <a href="tel:+919845661301" class="btn btn-primary btn-sm">📞 Call Now</a>
+        </div>
+      </div>
+      <div class="nav-hamburger" id="nav-hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════ HERO SECTION ═══════════ -->
+  <section class="hero bg-gradient-hero" id="hero">
+    <div class="hero-decor hero-decor-1"></div>
+    <div class="hero-decor hero-decor-2"></div>
+    <div class="hero-decor hero-decor-3"></div>
+    <div class="container grid-2" style="align-items:center;gap:var(--sp-12);">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="pulse"></span>
+          Now Open — Welcoming New Patients
+        </div>
+        <h1 class="hero-title">
+          Your Smile Deserves <span class="highlight">World-Class</span> Dental Care
+        </h1>
+        <p class="hero-description">
+          Experience premium dentistry with cutting-edge technology, gentle experts, and a luxurious healing environment. Your perfect smile journey starts here.
+        </p>
+        <div class="hero-actions">
+          <a href="tel:+919845661301" class="btn btn-call btn-lg">📞 Call Now</a>
+          <a href="https://wa.me/919845661301?text=Hello!%20I%20would%20like%20to%20know%20more%20about%20MH%20Dental%20World." class="btn btn-whatsapp btn-lg" target="_blank">💬 WhatsApp Us</a>
+        </div>
+      </div>
+      
+      <div class="hero-visual reveal-right" id="hero-3d-wrapper" style="position:relative;width:100%;height:100%;min-height:550px;display:flex;align-items:center;justify-content:center;">
+        <div id="hero-3d-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></div>
+        <!-- 3D Overlay Badge -->
+        <div style="position:absolute;bottom:5%;left:-5%;background:rgba(255,255,255,0.85);backdrop-filter:blur(10px);padding:1rem 1.5rem;border-radius:var(--radius-xl);box-shadow:var(--shadow-xl);border:1px solid rgba(255,255,255,0.5);display:flex;align-items:center;gap:1rem;animation:float 3s ease-in-out infinite;z-index:10;pointer-events:none;">
+          <div style="font-size:2rem;text-shadow:0 0 10px rgba(245, 158, 11, 0.5)">⭐</div>
+          <div>
+            <div style="font-weight:bold;color:var(--clr-gray-900);font-size:1.1rem">5.0 Rating</div>
+            <div style="font-size:var(--fs-xs);color:var(--clr-gray-500)">Google Reviews</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ TRUST BADGES ═══════════ -->
+  <section class="section-sm bg-white">
+    <div class="container">
+      <div class="trust-badges reveal">
+        <div class="trust-badge"><span class="badge-icon">🛡️</span> 100% Sterilization</div>
+        <div class="trust-badge"><span class="badge-icon">🏥</span> Advanced Equipment</div>
+        <div class="trust-badge"><span class="badge-icon">👨‍⚕️</span> Expert Specialists</div>
+        <div class="trust-badge"><span class="badge-icon">💯</span> Painless Procedures</div>
+        <div class="trust-badge"><span class="badge-icon">🕐</span> Flexible Timings</div>
+        <div class="trust-badge"><span class="badge-icon">👨‍👩‍👧‍👦</span> Family Friendly</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SERVICES PREVIEW ═══════════ -->
+  <section class="section bg-gradient-soft" id="services-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge"><span class="badge-dot"></span> Our Services</div>
+        <h2 class="section-title">Comprehensive Dental Solutions</h2>
+        <p class="section-subtitle">From routine cleanings to advanced cosmetic procedures, we offer a full spectrum of world-class dental treatments.</p>
+      </div>
+      <div class="grid-3 stagger-children" id="services-grid"></div>
+      <div style="text-align:center;margin-top:var(--sp-10)" class="reveal">
+        <a href="services.html" class="btn btn-secondary btn-lg">View All Services →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ WHY CHOOSE US ═══════════ -->
+  <section class="section bg-white">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge"><span class="badge-dot"></span> Why MH Dental World</div>
+        <h2 class="section-title">The Gold Standard in Dental Care</h2>
+        <p class="section-subtitle">We combine clinical excellence with luxurious comfort to give you an unmatched dental experience.</p>
+      </div>
+      <div class="grid-4 stagger-children">
+        <div class="glass-card feature-item">
+          <div class="feature-icon">🏆</div>
+          <h4 class="feature-title">Expert Specialists</h4>
+          <p class="feature-desc">Board-certified dentists with years of specialized training and proven track records.</p>
+        </div>
+        <div class="glass-card feature-item">
+          <div class="feature-icon">🔬</div>
+          <h4 class="feature-title">Latest Technology</h4>
+          <p class="feature-desc">Digital X-rays, 3D scanning, laser dentistry, and CAD/CAM precision for optimal results.</p>
+        </div>
+        <div class="glass-card feature-item">
+          <div class="feature-icon">💝</div>
+          <h4 class="feature-title">Painless Care</h4>
+          <p class="feature-desc">Advanced anesthesia techniques and gentle procedures ensure a comfortable experience.</p>
+        </div>
+        <div class="glass-card feature-item">
+          <div class="feature-icon">✨</div>
+          <h4 class="feature-title">Premium Hygiene</h4>
+          <p class="feature-desc">ISO-standard sterilization, disposable instruments, and hospital-grade disinfection protocols.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ DOCTORS PREVIEW ═══════════ -->
+  <section class="section bg-gradient-soft" id="doctors-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge"><span class="badge-dot"></span> Our Specialists</div>
+        <h2 class="section-title">Meet Your Dental Experts</h2>
+        <p class="section-subtitle">A team of highly qualified, compassionate dental professionals dedicated to your oral health.</p>
+      </div>
+      <div class="grid-3 stagger-children" id="doctors-grid"></div>
+      <div style="text-align:center;margin-top:var(--sp-10)" class="reveal">
+        <a href="doctors.html" class="btn btn-secondary btn-lg">View All Doctors →</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════ GALLERY PREVIEW ═══════════ -->
+  <section class="section bg-white" id="gallery-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge"><span class="badge-dot"></span> Our Clinic</div>
+        <h2 class="section-title">A Glimpse Inside</h2>
+        <p class="section-subtitle">Step into our modern, hygienic, and luxuriously designed dental facility.</p>
+      </div>
+      <div class="grid-3 stagger-children" id="gallery-grid"></div>
+      <div style="text-align:center;margin-top:var(--sp-10)" class="reveal">
+        <a href="gallery.html" class="btn btn-secondary btn-lg">View Full Gallery →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ REVIEWS CAROUSEL ═══════════ -->
+  <section class="section bg-gradient-soft" id="reviews-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge"><span class="badge-dot"></span> Patient Love</div>
+        <h2 class="section-title">What Our Patients Say</h2>
+        <p class="section-subtitle">Real stories from real patients — their experiences and smiles speak for us.</p>
+      </div>
+      <div class="reviews-carousel reveal">
+        <div class="reviews-track" id="reviews-track"></div>
+        <div class="carousel-controls">
+          <button class="carousel-btn carousel-prev" aria-label="Previous review">←</button>
+          <div class="carousel-dots">
+            <button class="carousel-dot active"></button>
+            <button class="carousel-dot"></button>
+            <button class="carousel-dot"></button>
+            <button class="carousel-dot"></button>
+            <button class="carousel-dot"></button>
+          </div>
+          <button class="carousel-btn carousel-next" aria-label="Next review">→</button>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:var(--sp-6)" class="reveal">
+        <a href="reviews.html" class="btn btn-ghost btn-sm">Read all reviews →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FAQ PREVIEW ═══════════ -->
+  <section class="section bg-white" id="faq-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge"><span class="badge-dot"></span> FAQ</div>
+        <h2 class="section-title">Common Questions</h2>
+      </div>
+      <div style="max-width:800px;margin:0 auto" class="reveal">
+        <div class="faq-item active">
+          <div class="faq-question">
+            <span>Is dental treatment at MH Dental World painless?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>Yes! We use advanced local anesthesia, numbing gels, and gentle techniques to ensure virtually painless procedures. Most patients are surprised by how comfortable their treatment was.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>What are your clinic timings?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>We are open Monday to Saturday from 9:00 AM to 9:00 PM, and Sunday from 10:00 AM to 2:00 PM. For emergencies, call us anytime at +91 98456 61301.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Do you offer EMI or payment plans?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>Yes, we offer flexible EMI options for major treatments like dental implants, braces, and smile makeovers. Ask our team for details about no-cost and low-cost EMI plans.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>How do I reach your clinic?</span>
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">
+            <p>We are conveniently located and easily accessible. Use <a href="https://maps.app.goo.gl/q8VG74xzfcwafMmp6?g_st=aw" target="_blank" style="color:var(--clr-primary);font-weight:600">Google Maps</a> for directions, or call us at +91 98456 61301 and we'll guide you.</p>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:var(--sp-8)" class="reveal">
+        <a href="faq.html" class="btn btn-ghost">View All FAQs →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ CTA SECTION ═══════════ -->
+  <section class="section" style="background:linear-gradient(135deg, var(--clr-primary) 0%, var(--clr-primary-dark) 100%);text-align:center;color:white">
+    <div class="container reveal">
+      <h2 style="color:white;font-size:var(--fs-4xl);margin-bottom:var(--sp-4)">Ready for Your Best Smile?</h2>
+      <p style="color:rgba(255,255,255,0.85);font-size:var(--fs-lg);max-width:550px;margin:0 auto var(--sp-8)">Take the first step towards a healthier, more confident smile. Reach out to us today.</p>
+      <div style="display:flex;gap:var(--sp-4);justify-content:center;flex-wrap:wrap">
+        <a href="tel:+919845661301" class="btn btn-lg" style="background:white;color:var(--clr-primary)">📞 Call +91 98456 61301</a>
+        <a href="https://wa.me/919845661301?text=Hello!%20I%20would%20like%20to%20know%20more%20about%20MH%20Dental%20World." class="btn btn-whatsapp btn-lg" target="_blank">💬 Chat on WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="footer-logo-icon">MH</div>
+            <span class="footer-logo-text">MH Dental World</span>
+          </div>
+          <p>Your trusted partner for premium dental care. We combine advanced technology with compassionate care to deliver exceptional smiles.</p>
+          <div class="footer-social">
+            <a href="https://www.instagram.com/mhdentalworld?igsh=MmRsb2d2OWhsZWo5" target="_blank" title="Instagram">📷</a>
+            <a href="https://wa.me/919845661301" target="_blank" title="WhatsApp">💬</a>
+            <a href="tel:+919845661301" title="Call Us">📞</a>
+            <a href="https://maps.app.goo.gl/q8VG74xzfcwafMmp6?g_st=aw" target="_blank" title="Location">📍</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="services.html">Our Services</a></li>
+            <li><a href="doctors.html">Our Doctors</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="reviews.html">Patient Reviews</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="services.html">Teeth Cleaning</a></li>
+            <li><a href="services.html">Dental Implants</a></li>
+            <li><a href="services.html">Braces & Aligners</a></li>
+            <li><a href="services.html">Root Canal</a></li>
+            <li><a href="services.html">Cosmetic Dentistry</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="tel:+919845661301">📞 +91 98456 61301</a></li>
+            <li><a href="mailto:info@mhdentalworld.com">📧 info@mhdentalworld.com</a></li>
+            <li><a href="https://maps.app.goo.gl/q8VG74xzfcwafMmp6?g_st=aw" target="_blank">📍 Get Directions</a></li>
+            <li><span>🕐 Mon–Sat: 9AM – 9PM</span></li>
+            <li><span>🕐 Sun: 10AM – 2PM</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 MH Dental World. All rights reserved.</span>
+        <div class="footer-legal">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+          <a href="admin/login.html">Admin</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════ FLOATING WHATSAPP ═══════════ -->
+  <a href="https://wa.me/919845661301?text=Hello!%20I%20would%20like%20to%20know%20more%20about%20MH%20Dental%20World." class="floating-whatsapp" id="floating-whatsapp" target="_blank" title="Chat on WhatsApp">
+    💬
+  </a>
+
+  <!-- ═══════════ MOBILE STICKY CTA ═══════════ -->
+  <div class="mobile-sticky-cta">
+    <a href="tel:+919845661301" class="btn btn-call" id="mobile-call-btn">📞 Call</a>
+    <a href="https://wa.me/919845661301" class="btn btn-whatsapp" id="mobile-wa-btn" target="_blank">💬 WhatsApp</a>
+  </div>
+
+  <!-- ═══════════ LIGHTBOX ═══════════ -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close">✕</button>
+    <img src="" alt="Gallery Image">
+  </div>
+
+  <!-- ═══════════ SCRIPTS ═══════════ -->
+  <script src="assets/js/supabase-config.js?v=15"></script>
+  <script src="assets/js/main.js?v=15"></script>
+  <script src="assets/js/services.js?v=15"></script>
+  <script src="assets/js/doctors.js?v=15"></script>
+  <script src="assets/js/gallery.js?v=15"></script>
+  <script src="assets/js/reviews.js?v=15"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Load featured services (6)
+      await MH.loadServices({ featured: true, limit: 6, containerId: 'services-grid' });
+      // Load featured doctors
+      await MH.loadDoctors({ featured: true, containerId: 'doctors-grid' });
+      // Load gallery
+      await MH.loadGallery({ containerId: 'gallery-grid' });
+      // Load reviews
+      await MH.loadReviews({ featured: true, containerId: 'reviews-track' });
+      // Init carousel after reviews load
+      MH.initReviewsCarousel('.reviews-track', { autoplay: true, interval: 5000 });
+      // Re-init scroll reveal for dynamic content
+      initScrollReveal();
+    });
+  </script>
+
+  <!-- 3D Hero Implementation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="assets/js/hero-3d.js?v=15"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login — MH Dental World</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23DC3558'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-weight='800' font-family='serif'>MH</text></svg>">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
+</head>
+<body>
+  <div class="admin-login-page">
+    <div style="position:absolute;top:-120px;right:-120px;width:400px;height:400px;background:radial-gradient(circle,var(--clr-primary-100) 0%,transparent 70%);border-radius:50%;pointer-events:none"></div>
+    <div style="position:absolute;bottom:-80px;left:-80px;width:350px;height:350px;background:radial-gradient(circle,var(--clr-rose) 0%,transparent 70%);border-radius:50%;pointer-events:none"></div>
+
+    <div class="admin-login-card">
+      <div class="login-logo">MH</div>
+      <h2>Welcome Back</h2>
+      <p class="login-subtitle">Sign in to MH Dental World Admin Portal</p>
+
+      <div class="login-error" id="login-error"></div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Username</label>
+          <input type="text" class="form-input" id="login-email" placeholder="Enter your username" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <input type="password" class="form-input" id="login-password" placeholder="Enter your password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" id="login-submit" style="width:100%;margin-top:var(--sp-4)">Sign In</button>
+      </form>
+
+      <div style="margin-top:var(--sp-6)">
+        <a href="../index.html" style="font-size:var(--fs-sm);color:var(--clr-primary);font-weight:500">← Back to Website</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Self-contained login — works even if external scripts fail
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      var errorEl = document.getElementById('login-error');
+      var submitBtn = document.getElementById('login-submit');
+      var email = document.getElementById('login-email').value.trim();
+      var password = document.getElementById('login-password').value;
+
+      errorEl.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing in...';
+
+      // Demo mode credentials
+      if (email === 'adminmhdental' && password === 'Admin123#') {
+        localStorage.setItem('mh_admin_demo', 'true');
+        // Redirect to dashboard
+        window.location.href = 'dashboard.html';
+        // Fallback: if redirect doesn't work within 2s, force it
+        setTimeout(function() {
+          window.location.replace('dashboard.html');
+        }, 2000);
+      } else {
+        errorEl.textContent = 'Invalid username or password';
+        errorEl.style.display = 'block';
+        errorEl.classList.add('show');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign In';
+      }
+    });
+  </script>
+</body>
+</html>

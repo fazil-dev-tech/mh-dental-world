@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — MH Dental World</title>
+  <meta name="description" content="Learn about MH Dental World — our mission, our team, and our commitment to premium dental care with advanced technology and compassionate service.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8627c'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-weight='800' font-family='serif'>MH</text></svg>">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-brand">
+        <div class="logo-icon">MH</div>
+        <div class="brand-text">
+          <span class="brand-name">MH Dental World</span>
+          <span class="brand-tagline">Advanced Dental Care</span>
+        </div>
+      </a>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link active">About</a>
+        <a href="services.html" class="nav-link">Services</a>
+        <a href="doctors.html" class="nav-link">Our Doctors</a>
+        <a href="gallery.html" class="nav-link">Gallery</a>
+        <a href="reviews.html" class="nav-link">Reviews</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <div class="nav-cta"><a href="tel:+919845661301" class="btn btn-primary btn-sm">📞 Call Now</a></div>
+      </div>
+      <div class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="container">
+      <h1 class="page-title">About MH Dental World</h1>
+      <div class="breadcrumb">
+        <a href="index.html">Home</a><span class="sep">/</span><span>About Us</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT CONTENT -->
+  <section class="section bg-white">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-16);align-items:center" class="reveal">
+        <div>
+          <div class="section-badge" style="margin-bottom:var(--sp-4)"><span class="badge-dot"></span> Our Story</div>
+          <h2 style="font-size:var(--fs-3xl);margin-bottom:var(--sp-6)">A Legacy of Excellence in Dental Care</h2>
+          <p style="margin-bottom:var(--sp-4)">MH Dental World was founded with a singular vision: to redefine the dental care experience by combining world-class clinical expertise with luxurious patient comfort. Our state-of-the-art clinic is designed to make every visit a premium experience.</p>
+          <p style="margin-bottom:var(--sp-4)">We believe that oral health is a cornerstone of overall well-being. That's why we invest in the latest technology, continuous education, and a compassionate team that treats every patient like family.</p>
+          <p>From routine check-ups to complex surgical procedures, our multi-specialty team delivers exceptional results with gentle, personalized care.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);">
+          <img src="assets/images/gallery/reception.jpeg" alt="Reception" style="border-radius:var(--radius-xl);width:100%;height:100%;object-fit:cover;aspect-ratio:1">
+          <img src="assets/images/gallery/waiting-area.jpeg" alt="Waiting Area" style="border-radius:var(--radius-xl);width:100%;height:100%;object-fit:cover;aspect-ratio:1">
+          <img src="assets/images/gallery/consultation-room.jpeg" alt="Consultation" style="border-radius:var(--radius-xl);width:100%;height:100%;object-fit:cover;grid-column:span 2;aspect-ratio:2/1">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION & VISION -->
+  <section class="section bg-gradient-soft">
+    <div class="container">
+      <div class="grid-3 stagger-children">
+        <div class="glass-card" style="text-align:center">
+          <div style="font-size:48px;margin-bottom:var(--sp-4)">🎯</div>
+          <h3 style="font-size:var(--fs-xl);margin-bottom:var(--sp-3)">Our Mission</h3>
+          <p style="font-size:var(--fs-sm);color:var(--clr-gray-500)">To provide accessible, compassionate, and technologically advanced dental care that transforms smiles and improves lives.</p>
+        </div>
+        <div class="glass-card" style="text-align:center">
+          <div style="font-size:48px;margin-bottom:var(--sp-4)">🔭</div>
+          <h3 style="font-size:var(--fs-xl);margin-bottom:var(--sp-3)">Our Vision</h3>
+          <p style="font-size:var(--fs-sm);color:var(--clr-gray-500)">To be the most trusted and preferred dental care destination known for clinical excellence, innovation, and exceptional patient experiences.</p>
+        </div>
+        <div class="glass-card" style="text-align:center">
+          <div style="font-size:48px;margin-bottom:var(--sp-4)">💎</div>
+          <h3 style="font-size:var(--fs-xl);margin-bottom:var(--sp-3)">Our Values</h3>
+          <p style="font-size:var(--fs-sm);color:var(--clr-gray-500)">Integrity, compassion, excellence, and innovation guide everything we do — from patient care to community engagement.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US -->
+  <section class="section bg-white">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">Why Choose MH Dental World?</h2>
+      </div>
+      <div class="grid-4 stagger-children">
+        <div class="glass-card feature-item">
+          <div class="feature-icon">🏆</div>
+          <h4 class="feature-title">Expert Team</h4>
+          <p class="feature-desc">Board-certified specialists with extensive training in their respective fields.</p>
+        </div>
+        <div class="glass-card feature-item">
+          <div class="feature-icon">🔬</div>
+          <h4 class="feature-title">Modern Technology</h4>
+          <p class="feature-desc">Digital X-rays, 3D CBCT, intraoral cameras, and laser dentistry.</p>
+        </div>
+        <div class="glass-card feature-item">
+          <div class="feature-icon">🛡️</div>
+          <h4 class="feature-title">100% Hygiene</h4>
+          <p class="feature-desc">Hospital-grade sterilization and infection control protocols.</p>
+        </div>
+        <div class="glass-card feature-item">
+          <div class="feature-icon">💝</div>
+          <h4 class="feature-title">Patient First</h4>
+          <p class="feature-desc">Personalized treatment plans, transparent pricing, and gentle care.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- GALLERY -->
+  <section class="section bg-white">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title">Our Facility</h2>
+        <p class="section-subtitle">Designed for comfort and clinical excellence.</p>
+      </div>
+      <div class="grid-3 stagger-children" id="about-gallery"></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="background:linear-gradient(135deg, var(--clr-primary) 0%, var(--clr-primary-dark) 100%);text-align:center;color:white">
+    <div class="container reveal">
+      <h2 style="color:white;font-size:var(--fs-3xl);margin-bottom:var(--sp-4)">Experience the MH Dental World Difference</h2>
+      <p style="color:rgba(255,255,255,0.85);font-size:var(--fs-md);max-width:500px;margin:0 auto var(--sp-8)">Call us today or send a WhatsApp message to start your journey to a perfect smile.</p>
+      <div style="display:flex;gap:var(--sp-4);justify-content:center;flex-wrap:wrap">
+        <a href="tel:+919845661301" class="btn btn-lg" style="background:white;color:var(--clr-primary)">📞 Call +91 98456 61301</a>
+        <a href="https://wa.me/919845661301" class="btn btn-whatsapp btn-lg" target="_blank">💬 WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo"><div class="footer-logo-icon">MH</div><span class="footer-logo-text">MH Dental World</span></div>
+          <p>Your trusted partner for premium dental care.</p>
+          <div class="footer-social">
+            <a href="https://www.instagram.com/mhdentalworld?igsh=MmRsb2d2OWhsZWo5" target="_blank">📷</a>
+            <a href="https://wa.me/919845661301" target="_blank">💬</a>
+            <a href="tel:+919845661301">📞</a>
+          </div>
+        </div>
+        <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="doctors.html">Doctors</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div class="footer-col"><h4>Services</h4><ul><li><a href="services.html">Teeth Cleaning</a></li><li><a href="services.html">Dental Implants</a></li><li><a href="services.html">Braces</a></li><li><a href="services.html">Cosmetic Dentistry</a></li></ul></div>
+        <div class="footer-col"><h4>Contact</h4><ul><li><a href="tel:+919845661301">📞 +91 98456 61301</a></li><li><a href="mailto:info@mhdentalworld.com">📧 info@mhdentalworld.com</a></li><li><a href="https://maps.app.goo.gl/q8VG74xzfcwafMmp6?g_st=aw" target="_blank">📍 Directions</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><span>© 2026 MH Dental World. All rights reserved.</span><div class="footer-legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/919845661301" class="floating-whatsapp" target="_blank">💬</a>
+  <div class="mobile-sticky-cta"><a href="tel:+919845661301" class="btn btn-call">📞 Call</a><a href="https://wa.me/919845661301" class="btn btn-whatsapp" target="_blank">💬 WhatsApp</a></div>
+  <div class="lightbox" id="lightbox"><button class="lightbox-close">✕</button><img src="" alt=""></div>
+
+  <script src="assets/js/supabase-config.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/gallery.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await MH.loadGallery({ containerId: 'about-gallery' });
+      initScrollReveal();
+    });
+  </script>
+</body>
+</html>

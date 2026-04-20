@@ -1,0 +1,281 @@
+/* ============================================================
+   MH DENTAL WORLD — Responsive Breakpoints
+   Mobile First: 320 → 480 → 768 → 1024 → 1200 → 1440+
+   ============================================================ */
+
+/* ── Tablet & Below (≤ 1024px) ── */
+@media (max-width: 1024px) {
+  :root {
+    --fs-5xl: 3rem;
+    --fs-4xl: 2.5rem;
+    --fs-3xl: 2rem;
+  }
+
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-8);
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-6);
+  }
+
+  .hero-visual {
+    display: none;
+  }
+
+  .hero-content {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .hero-description {
+    max-width: 100%;
+    margin: 0 auto var(--sp-8);
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+
+  .hero-stats {
+    justify-content: center;
+  }
+
+  .reviews-track .review-card {
+    min-width: calc(50% - var(--sp-4));
+  }
+}
+
+/* ── Mobile landscape & below (≤ 768px) ── */
+@media (max-width: 768px) {
+  :root {
+    --fs-5xl: 2.5rem;
+    --fs-4xl: 2rem;
+    --fs-3xl: 1.75rem;
+  }
+
+  .section {
+    padding: var(--sp-16) 0;
+  }
+
+  .section-sm {
+    padding: var(--sp-12) 0;
+  }
+
+  .section-header {
+    margin-bottom: var(--sp-10);
+  }
+
+  /* Navbar mobile */
+  .nav-links {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--clr-white);
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--sp-2);
+    padding: var(--sp-10);
+    transform: translateX(100%);
+    transition: transform var(--duration-normal) var(--ease-out);
+    z-index: 5;
+  }
+
+  .nav-links.open {
+    transform: translateX(0);
+  }
+
+  .nav-link {
+    font-size: var(--fs-lg);
+    padding: var(--sp-4);
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-cta {
+    margin-left: 0;
+    margin-top: var(--sp-4);
+    width: 100%;
+  }
+
+  .nav-cta .btn {
+    width: 100%;
+  }
+
+  .nav-hamburger {
+    display: flex;
+  }
+
+  /* Grid */
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Footer */
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: var(--sp-8);
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--sp-4);
+    text-align: center;
+  }
+
+  /* Stats */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-item .stat-value {
+    font-size: var(--fs-4xl);
+  }
+
+  /* Hero */
+  .hero {
+    min-height: auto;
+    padding: 120px 0 var(--sp-16);
+  }
+
+  .hero-stats {
+    gap: var(--sp-6);
+  }
+
+  .hero-stat .stat-number {
+    font-size: var(--fs-2xl);
+  }
+
+  /* Reviews */
+  .reviews-track .review-card {
+    min-width: 100%;
+  }
+
+  /* Mobile CTA */
+  .mobile-sticky-cta {
+    display: flex;
+  }
+
+  .floating-whatsapp {
+    bottom: 85px;
+  }
+
+  /* Page header */
+  .page-header {
+    padding: 120px 0 var(--sp-12);
+  }
+
+  .page-header .page-title {
+    font-size: var(--fs-3xl);
+  }
+
+  /* BA cards */
+  .ba-images {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Mobile portrait (≤ 480px) ── */
+@media (max-width: 480px) {
+  :root {
+    --fs-5xl: 2rem;
+    --fs-4xl: 1.75rem;
+    --fs-3xl: 1.5rem;
+    --fs-2xl: 1.25rem;
+  }
+
+  .container {
+    padding: 0 var(--sp-4);
+  }
+
+  .section {
+    padding: var(--sp-12) 0;
+  }
+
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .hero-stats {
+    flex-direction: column;
+    gap: var(--sp-4);
+    align-items: center;
+  }
+
+  .card, .glass-card {
+    padding: var(--sp-6);
+  }
+
+  .btn-lg {
+    padding: var(--sp-3) var(--sp-6);
+    font-size: var(--fs-sm);
+  }
+
+  .trust-badges {
+    gap: var(--sp-3);
+  }
+
+  .trust-badge {
+    font-size: var(--fs-xs);
+    padding: var(--sp-2) var(--sp-4);
+  }
+
+  .faq-question {
+    padding: var(--sp-4) var(--sp-5);
+    font-size: var(--fs-sm);
+  }
+
+  .faq-answer {
+    padding: 0 var(--sp-5) 0;
+  }
+
+  .faq-item.active .faq-answer {
+    padding: 0 var(--sp-5) var(--sp-4);
+  }
+
+  .contact-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* ── Large desktops (≥ 1441px) ── */
+@media (min-width: 1441px) {
+  .container {
+    max-width: 1400px;
+  }
+
+  .hero-visual {
+    width: 50%;
+    max-width: 700px;
+  }
+}

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Services — MH Dental World Admin</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8627c'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-weight='800' font-family='serif'>MH</text></svg>">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="sidebar-brand"><div class="sb-icon">MH</div><div class="sb-text"><h3>MH Dental World</h3><span>Admin Portal</span></div></div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="dashboard.html" class="sidebar-link"><span class="link-icon">📊</span> Dashboard</a>
+        <div class="sidebar-section-label">Content Management</div>
+        <a href="doctors.html" class="sidebar-link"><span class="link-icon">👨‍⚕️</span> Doctors</a>
+        <a href="services.html" class="sidebar-link active"><span class="link-icon">🦷</span> Services</a>
+        <a href="reviews.html" class="sidebar-link"><span class="link-icon">⭐</span> Reviews</a>
+        <a href="gallery.html" class="sidebar-link"><span class="link-icon">🖼️</span> Gallery</a>
+        <a href="banners.html" class="sidebar-link"><span class="link-icon">🎯</span> Hero & Banners</a>
+        <a href="faqs.html" class="sidebar-link"><span class="link-icon">❓</span> FAQs</a>
+        <div class="sidebar-section-label">Settings</div>
+        <a href="contact.html" class="sidebar-link"><span class="link-icon">📞</span> Contact Info</a>
+        <a href="settings.html" class="sidebar-link"><span class="link-icon">⚙️</span> Clinic Settings</a>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar">A</div><div class="user-info"><div class="user-name">Admin</div><div class="user-role">Super Admin</div></div><button class="sidebar-logout" id="admin-logout" title="Logout">🚪</button></div></div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div class="topbar-left"><button class="sidebar-toggle" id="sidebar-toggle">☰</button><div><h2>Manage Services</h2><span class="topbar-breadcrumb">Add, edit, and manage dental services</span></div></div>
+        <button class="btn btn-primary btn-sm" onclick="openAddService()">+ Add Service</button>
+      </header>
+
+      <div class="admin-content">
+        <div class="admin-table-wrapper">
+          <div class="admin-table-header">
+            <h3>All Services (<span id="services-count">0</span>)</h3>
+            <div class="admin-table-actions">
+              <div class="admin-search"><span>🔍</span><input type="text" id="service-search" placeholder="Search services..."></div>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead><tr><th>Service</th><th>Icon</th><th>Featured</th><th>Status</th><th>Order</th><th>Actions</th></tr></thead>
+              <tbody id="services-tbody"><tr><td colspan="6" style="text-align:center;padding:40px;color:var(--clr-gray-400)"><div class="spinner" style="margin:0 auto 12px"></div>Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ADD/EDIT SERVICE MODAL -->
+  <div class="admin-modal-overlay" id="service-modal">
+    <div class="admin-modal" style="max-width:640px">
+      <div class="admin-modal-header"><h3 id="service-modal-title">Add Service</h3><button class="modal-close" onclick="closeServiceModal()">✕</button></div>
+      <form id="service-form">
+        <div class="admin-modal-body">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Title *</label><input type="text" class="form-input" id="svc-title" required placeholder="e.g. Dental Implants"></div>
+            <div class="form-group"><label class="form-label">Icon (emoji)</label><input type="text" class="form-input" id="svc-icon" placeholder="e.g. 🔩" style="max-width:100px"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Short Description</label><textarea class="form-textarea" id="svc-short-desc" placeholder="Brief service description..." style="min-height:70px"></textarea></div>
+          <div class="form-group"><label class="form-label">Full Description</label><textarea class="form-textarea" id="svc-full-desc" placeholder="Detailed service description..."></textarea></div>
+          <div class="form-group"><label class="form-label">Benefits (comma-separated)</label><input type="text" class="form-input" id="svc-benefits" placeholder="e.g. Painless, Long-lasting, Natural look"></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Display Order</label><input type="number" class="form-input" id="svc-order" placeholder="1" min="1"></div>
+            <div style="display:flex;gap:var(--sp-6);align-items:center;padding-top:24px">
+              <label class="toggle-switch"><input type="checkbox" id="svc-active" checked><span class="toggle-slider"></span></label><span style="font-size:var(--fs-sm)">Active</span>
+              <label class="toggle-switch"><input type="checkbox" id="svc-featured"><span class="toggle-slider"></span></label><span style="font-size:var(--fs-sm)">Featured</span>
+            </div>
+          </div>
+        </div>
+        <div class="admin-modal-footer"><button type="button" class="btn btn-ghost" onclick="closeServiceModal()">Cancel</button><button type="submit" class="btn btn-primary">Save Service</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DELETE SERVICE MODAL -->
+  <div class="admin-modal-overlay" id="delete-svc-modal">
+    <div class="admin-modal" style="max-width:440px"><div class="confirm-dialog"><div class="confirm-icon">🗑️</div><h3>Delete Service?</h3><p>Are you sure you want to delete <strong id="delete-svc-name"></strong>?</p><div class="confirm-actions"><button class="btn btn-ghost" onclick="document.getElementById('delete-svc-modal').classList.remove('active')">Cancel</button><button class="btn btn-danger" id="confirm-delete-svc">Delete</button></div></div></div>
+  </div>
+
+  <script src="../assets/js/supabase-config.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/admin-auth.js"></script>
+  <script src="../assets/js/services.js"></script>
+  <script>
+    let allAdminServices = [];
+    let editingSvcId = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await MH.requireAuth(); if (!user) return;
+      MH.initAdminSidebar();
+      await loadAdminServices();
+      initServiceForm();
+      document.getElementById('service-search').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const filtered = allAdminServices.filter(s => s.title.toLowerCase().includes(term));
+        renderServicesTable(filtered);
+      });
+    });
+
+    async function loadAdminServices() {
+      if (MH.isSupabaseConfigured()) {
+        try { const { data } = await MH.supabase.from('services').select('*').order('display_order'); allAdminServices = data || []; } catch(e) { allAdminServices = [...MH.SAMPLE_SERVICES]; }
+      } else {
+        const stored = localStorage.getItem('mh_services');
+        allAdminServices = stored ? JSON.parse(stored) : [...MH.SAMPLE_SERVICES];
+      }
+      renderServicesTable(allAdminServices);
+      document.getElementById('services-count').textContent = allAdminServices.length;
+    }
+
+    function saveServicesLocal() { localStorage.setItem('mh_services', JSON.stringify(allAdminServices)); }
+
+    function renderServicesTable(svcs) {
+      const tbody = document.getElementById('services-tbody');
+      if (!svcs.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--clr-gray-400)">No services found.</td></tr>'; return; }
+      tbody.innerHTML = svcs.map(s => `<tr>
+        <td><div class="table-name">${s.title}</div><div class="table-sub">${(s.short_desc||'').substring(0,50)}...</div></td>
+        <td style="font-size:24px">${s.icon||'🦷'}</td>
+        <td><span class="table-status ${s.featured?'featured':''}">${s.featured?'★ Yes':'—'}</span></td>
+        <td><span class="table-status ${s.active?'active':'inactive'}">${s.active?'● Active':'● Inactive'}</span></td>
+        <td>${s.display_order||'—'}</td>
+        <td><div class="table-actions"><button class="table-action-btn edit" onclick="openEditService(${s.id})">✏️</button><button class="table-action-btn delete" onclick="confirmDeleteService(${s.id},'${s.title.replace(/'/g,"\\'")}')">🗑️</button></div></td>
+      </tr>`).join('');
+    }
+
+    function openAddService() { editingSvcId = null; document.getElementById('service-form').reset(); document.getElementById('service-modal-title').textContent='Add Service'; document.getElementById('service-modal').classList.add('active'); }
+    function openEditService(id) {
+      const s = allAdminServices.find(x=>x.id===id); if(!s)return; editingSvcId=id;
+      document.getElementById('service-modal-title').textContent='Edit Service';
+      document.getElementById('svc-title').value=s.title||'';
+      document.getElementById('svc-icon').value=s.icon||'';
+      document.getElementById('svc-short-desc').value=s.short_desc||'';
+      document.getElementById('svc-full-desc').value=s.full_desc||'';
+      document.getElementById('svc-benefits').value=s.benefits||'';
+      document.getElementById('svc-order').value=s.display_order||'';
+      document.getElementById('svc-active').checked=s.active!==false;
+      document.getElementById('svc-featured').checked=s.featured===true;
+      document.getElementById('service-modal').classList.add('active');
+    }
+    function closeServiceModal() { document.getElementById('service-modal').classList.remove('active'); editingSvcId=null; }
+
+    function initServiceForm() {
+      document.getElementById('service-form').addEventListener('submit', async(e)=>{
+        e.preventDefault();
+        const data = { title:document.getElementById('svc-title').value.trim(), icon:document.getElementById('svc-icon').value.trim()||'🦷', short_desc:document.getElementById('svc-short-desc').value.trim(), full_desc:document.getElementById('svc-full-desc').value.trim(), benefits:document.getElementById('svc-benefits').value.trim(), display_order:parseInt(document.getElementById('svc-order').value)||1, active:document.getElementById('svc-active').checked, featured:document.getElementById('svc-featured').checked };
+        if(!data.title){MH.showToast('Title is required','error');return;}
+        if(MH.isSupabaseConfigured()){
+          try{ if(editingSvcId){await MH.supabase.from('services').update(data).eq('id',editingSvcId);}else{await MH.supabase.from('services').insert(data);} }catch(err){MH.showToast(err.message,'error');return;}
+        } else {
+          if(editingSvcId){const i=allAdminServices.findIndex(x=>x.id===editingSvcId);if(i!==-1)allAdminServices[i]={...allAdminServices[i],...data};}else{data.id=Date.now();allAdminServices.push(data);}
+          saveServicesLocal();
+        }
+        MH.showToast(editingSvcId?'Service updated!':'Service added!','success'); closeServiceModal(); await loadAdminServices();
+      });
+    }
+
+    function confirmDeleteService(id,name){ document.getElementById('delete-svc-name').textContent=name; document.getElementById('delete-svc-modal').classList.add('active'); document.getElementById('confirm-delete-svc').onclick=async()=>{ if(MH.isSupabaseConfigured()){await MH.supabase.from('services').delete().eq('id',id);}else{allAdminServices=allAdminServices.filter(x=>x.id!==id);saveServicesLocal();} MH.showToast('Service deleted','success'); document.getElementById('delete-svc-modal').classList.remove('active'); await loadAdminServices(); }; }
+  </script>
+</body>
+</html>

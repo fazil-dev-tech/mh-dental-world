@@ -1,0 +1,350 @@
+/* ============================================================
+   MH DENTAL WORLD — Premium Design System
+   Light Pink · White · Blush · Rose · Glassmorphism
+   ============================================================ */
+
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+/* ── CSS Custom Properties ── */
+:root {
+  /* — Brand Palette: Crimson Pink — */
+  --clr-primary:        #DC3558;
+  --clr-primary-light:  #E8627C;
+  --clr-primary-dark:   #B8244A;
+  --clr-primary-50:     #FEF1F4;
+  --clr-primary-100:    #FDE0E6;
+  --clr-primary-200:    #FBBECE;
+  --clr-primary-300:    #F7899E;
+  --clr-primary-400:    #EA5771;
+  --clr-primary-500:    #DC3558;
+  --clr-primary-600:    #C42350;
+  --clr-primary-700:    #A51B43;
+  --clr-primary-800:    #891A3D;
+  --clr-primary-900:    #741A39;
+
+  /* — Blush / Rose / Pink Tones — */
+  --clr-blush:          #fff0f3;
+  --clr-rose:           #ffe4ea;
+  --clr-pale-pink:      #fff5f7;
+  --clr-soft-rose:      #ffd6de;
+  --clr-cream:          #fffbfc;
+
+  /* — Neutrals — */
+  --clr-white:          #ffffff;
+  --clr-off-white:      #fefefe;
+  --clr-gray-50:        #fafafa;
+  --clr-gray-100:       #f5f5f5;
+  --clr-gray-200:       #e5e5e5;
+  --clr-gray-300:       #d4d4d4;
+  --clr-gray-400:       #a3a3a3;
+  --clr-gray-500:       #737373;
+  --clr-gray-600:       #525252;
+  --clr-gray-700:       #404040;
+  --clr-gray-800:       #262626;
+  --clr-gray-900:       #171717;
+
+  /* — Accent / Trust — */
+  --clr-accent-teal:    #14b8a6;
+  --clr-accent-gold:    #f59e0b;
+  --clr-accent-blue:    #3b82f6;
+  --clr-success:        #22c55e;
+  --clr-warning:        #f59e0b;
+  --clr-error:          #ef4444;
+  --clr-info:           #3b82f6;
+
+  /* — Glassmorphism — */
+  --glass-bg:           rgba(255,255,255,0.65);
+  --glass-bg-strong:    rgba(255,255,255,0.82);
+  --glass-border:       rgba(255,255,255,0.35);
+  --glass-blur:         20px;
+  --glass-blur-strong:  30px;
+
+  /* — Typography — */
+  --ff-heading:  'Playfair Display', Georgia, serif;
+  --ff-body:     'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ff-accent:   'Outfit', 'Inter', sans-serif;
+
+  --fs-xs:    0.75rem;
+  --fs-sm:    0.875rem;
+  --fs-base:  1rem;
+  --fs-md:    1.125rem;
+  --fs-lg:    1.25rem;
+  --fs-xl:    1.5rem;
+  --fs-2xl:   1.875rem;
+  --fs-3xl:   2.25rem;
+  --fs-4xl:   3rem;
+  --fs-5xl:   3.75rem;
+  --fs-6xl:   4.5rem;
+
+  --fw-light:     300;
+  --fw-normal:    400;
+  --fw-medium:    500;
+  --fw-semibold:  600;
+  --fw-bold:      700;
+  --fw-extrabold: 800;
+
+  --lh-tight:   1.2;
+  --lh-snug:    1.35;
+  --lh-normal:  1.6;
+  --lh-relaxed: 1.75;
+
+  /* — Spacing — */
+  --sp-1:  0.25rem;
+  --sp-2:  0.5rem;
+  --sp-3:  0.75rem;
+  --sp-4:  1rem;
+  --sp-5:  1.25rem;
+  --sp-6:  1.5rem;
+  --sp-8:  2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+  --sp-20: 5rem;
+  --sp-24: 6rem;
+  --sp-32: 8rem;
+
+  /* — Borders & Radius — */
+  --radius-sm:   0.375rem;
+  --radius-md:   0.625rem;
+  --radius-lg:   1rem;
+  --radius-xl:   1.5rem;
+  --radius-2xl:  2rem;
+  --radius-full: 9999px;
+
+  /* — Shadows — */
+  --shadow-sm:      0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:      0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
+  --shadow-lg:      0 10px 25px -5px rgba(0,0,0,0.06), 0 8px 10px -6px rgba(0,0,0,0.04);
+  --shadow-xl:      0 20px 40px -10px rgba(0,0,0,0.08);
+  --shadow-2xl:     0 25px 50px -12px rgba(0,0,0,0.12);
+  --shadow-pink:    0 10px 30px -8px rgba(220,53,88,0.28);
+  --shadow-pink-lg: 0 20px 50px -12px rgba(220,53,88,0.38);
+  --shadow-glass:   0 8px 32px rgba(0,0,0,0.06);
+
+  /* — Transitions — */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast:   0.15s;
+  --duration-normal: 0.3s;
+  --duration-slow:   0.5s;
+
+  /* — Z-index — */
+  --z-dropdown:  100;
+  --z-sticky:    200;
+  --z-fixed:     300;
+  --z-modal-bg:  400;
+  --z-modal:     500;
+  --z-popover:   600;
+  --z-tooltip:   700;
+  --z-toast:     800;
+
+  /* — Widths — */
+  --max-w-sm:   640px;
+  --max-w-md:   768px;
+  --max-w-lg:   1024px;
+  --max-w-xl:   1200px;
+  --max-w-2xl:  1400px;
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--ff-body);
+  font-weight: var(--fw-normal);
+  line-height: var(--lh-normal);
+  color: var(--clr-gray-800);
+  background: var(--clr-cream);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+ul, ol { list-style: none; }
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+button { cursor: pointer; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  color: var(--clr-gray-900);
+}
+
+h1 { font-size: var(--fs-5xl); }
+h2 { font-size: var(--fs-4xl); }
+h3 { font-size: var(--fs-3xl); }
+h4 { font-size: var(--fs-2xl); }
+h5 { font-size: var(--fs-xl); }
+h6 { font-size: var(--fs-lg); }
+
+p {
+  color: var(--clr-gray-600);
+  line-height: var(--lh-relaxed);
+}
+
+/* ── Utility: Container ── */
+.container {
+  width: 100%;
+  max-width: var(--max-w-xl);
+  margin: 0 auto;
+  padding: 0 var(--sp-6);
+}
+
+.container-lg {
+  max-width: var(--max-w-2xl);
+}
+
+/* ── Utility: Section Spacing ── */
+.section {
+  padding: var(--sp-24) 0;
+  position: relative;
+}
+
+.section-sm {
+  padding: var(--sp-16) 0;
+}
+
+/* ── Section Headings ── */
+.section-header {
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto var(--sp-16);
+}
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-5);
+  background: var(--clr-primary-50);
+  border: 1px solid var(--clr-primary-200);
+  border-radius: var(--radius-full);
+  font-family: var(--ff-accent);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--clr-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--sp-4);
+}
+
+.section-badge .badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--clr-primary);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.4); }
+}
+
+.section-title {
+  font-size: var(--fs-4xl);
+  margin-bottom: var(--sp-4);
+  background: linear-gradient(135deg, var(--clr-gray-900) 0%, var(--clr-primary-700) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-subtitle {
+  font-size: var(--fs-md);
+  color: var(--clr-gray-500);
+  max-width: 550px;
+  margin: 0 auto;
+}
+
+/* ── Background Patterns ── */
+.bg-blush { background: var(--clr-blush); }
+.bg-rose  { background: var(--clr-rose); }
+.bg-white { background: var(--clr-white); }
+.bg-cream { background: var(--clr-cream); }
+
+.bg-gradient-soft {
+  background: linear-gradient(180deg, var(--clr-cream) 0%, var(--clr-blush) 50%, var(--clr-cream) 100%);
+}
+
+.bg-gradient-hero {
+  background: linear-gradient(135deg, var(--clr-blush) 0%, var(--clr-cream) 40%, var(--clr-pale-pink) 100%);
+}
+
+/* ── Decorative Blobs ── */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.blob-pink {
+  background: var(--clr-primary-200);
+}
+
+.blob-rose {
+  background: var(--clr-soft-rose);
+}
+
+.blob-teal {
+  background: rgba(20, 184, 166, 0.15);
+}
+
+/* ── Selection Color ── */
+::selection {
+  background: var(--clr-primary-200);
+  color: var(--clr-primary-800);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--clr-gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--clr-primary-300);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--clr-primary);
+}

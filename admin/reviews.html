@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Reviews — MH Dental World Admin</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8627c'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-weight='800' font-family='serif'>MH</text></svg>">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="sidebar-brand"><div class="sb-icon">MH</div><div class="sb-text"><h3>MH Dental World</h3><span>Admin Portal</span></div></div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="dashboard.html" class="sidebar-link"><span class="link-icon">📊</span> Dashboard</a>
+        <div class="sidebar-section-label">Content Management</div>
+        <a href="doctors.html" class="sidebar-link"><span class="link-icon">👨‍⚕️</span> Doctors</a>
+        <a href="services.html" class="sidebar-link"><span class="link-icon">🦷</span> Services</a>
+        <a href="reviews.html" class="sidebar-link active"><span class="link-icon">⭐</span> Reviews</a>
+        <a href="gallery.html" class="sidebar-link"><span class="link-icon">🖼️</span> Gallery</a>
+        <a href="banners.html" class="sidebar-link"><span class="link-icon">🎯</span> Hero & Banners</a>
+        <a href="faqs.html" class="sidebar-link"><span class="link-icon">❓</span> FAQs</a>
+        <div class="sidebar-section-label">Settings</div>
+        <a href="contact.html" class="sidebar-link"><span class="link-icon">📞</span> Contact Info</a>
+        <a href="settings.html" class="sidebar-link"><span class="link-icon">⚙️</span> Clinic Settings</a>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar">A</div><div class="user-info"><div class="user-name">Admin</div><div class="user-role">Super Admin</div></div><button class="sidebar-logout" id="admin-logout">🚪</button></div></div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div class="topbar-left"><button class="sidebar-toggle" id="sidebar-toggle">☰</button><div><h2>Manage Reviews</h2><span class="topbar-breadcrumb">Add, edit, approve, and manage patient reviews</span></div></div>
+        <button class="btn btn-primary btn-sm" onclick="openAddReview()">+ Add Review</button>
+      </header>
+      <div class="admin-content">
+        <div class="admin-table-wrapper">
+          <div class="admin-table-header">
+            <h3>All Reviews (<span id="reviews-count">0</span>)</h3>
+            <div class="admin-table-actions"><div class="admin-search"><span>🔍</span><input type="text" id="review-search" placeholder="Search reviews..."></div></div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead><tr><th>Patient</th><th>Treatment</th><th>Rating</th><th>Review</th><th>Status</th><th>Featured</th><th>Actions</th></tr></thead>
+              <tbody id="reviews-tbody"><tr><td colspan="7" style="text-align:center;padding:40px;color:var(--clr-gray-400)">Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ADD/EDIT REVIEW MODAL -->
+  <div class="admin-modal-overlay" id="review-modal">
+    <div class="admin-modal" style="max-width:600px">
+      <div class="admin-modal-header"><h3 id="review-modal-title">Add Review</h3><button class="modal-close" onclick="closeReviewModal()">✕</button></div>
+      <form id="review-form">
+        <div class="admin-modal-body">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Patient Name *</label><input type="text" class="form-input" id="rev-name" required placeholder="Patient name"></div>
+            <div class="form-group"><label class="form-label">Treatment</label><input type="text" class="form-input" id="rev-treatment" placeholder="e.g. Root Canal"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rating</label>
+            <select class="form-select form-input" id="rev-rating">
+              <option value="5">⭐⭐⭐⭐⭐ (5 stars)</option><option value="4">⭐⭐⭐⭐ (4 stars)</option><option value="3">⭐⭐⭐ (3 stars)</option><option value="2">⭐⭐ (2 stars)</option><option value="1">⭐ (1 star)</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Review Text *</label><textarea class="form-textarea" id="rev-text" required placeholder="Patient's review text..."></textarea></div>
+          <div style="display:flex;gap:var(--sp-6);flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:var(--sp-3)"><label class="toggle-switch"><input type="checkbox" id="rev-approved" checked><span class="toggle-slider"></span></label><span style="font-size:var(--fs-sm)">Approved</span></div>
+            <div style="display:flex;align-items:center;gap:var(--sp-3)"><label class="toggle-switch"><input type="checkbox" id="rev-featured"><span class="toggle-slider"></span></label><span style="font-size:var(--fs-sm)">Featured</span></div>
+          </div>
+        </div>
+        <div class="admin-modal-footer"><button type="button" class="btn btn-ghost" onclick="closeReviewModal()">Cancel</button><button type="submit" class="btn btn-primary">Save Review</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="admin-modal-overlay" id="delete-rev-modal">
+    <div class="admin-modal" style="max-width:440px"><div class="confirm-dialog"><div class="confirm-icon">🗑️</div><h3>Delete Review?</h3><p>Delete review by <strong id="delete-rev-name"></strong>?</p><div class="confirm-actions"><button class="btn btn-ghost" onclick="document.getElementById('delete-rev-modal').classList.remove('active')">Cancel</button><button class="btn btn-danger" id="confirm-delete-rev">Delete</button></div></div></div>
+  </div>
+
+  <script src="../assets/js/supabase-config.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/admin-auth.js"></script>
+  <script src="../assets/js/reviews.js"></script>
+  <script>
+    let allAdminReviews=[], editingRevId=null;
+    document.addEventListener('DOMContentLoaded', async()=>{
+      const user=await MH.requireAuth(); if(!user)return; MH.initAdminSidebar(); await loadAdminReviews();
+      document.getElementById('review-search').addEventListener('input',e=>{const t=e.target.value.toLowerCase();renderReviewsTable(allAdminReviews.filter(r=>(r.patient_name||'').toLowerCase().includes(t)||(r.treatment||'').toLowerCase().includes(t)));});
+      document.getElementById('review-form').addEventListener('submit',async e=>{
+        e.preventDefault();
+        const d={patient_name:document.getElementById('rev-name').value.trim(),treatment:document.getElementById('rev-treatment').value.trim(),rating:parseInt(document.getElementById('rev-rating').value),review_text:document.getElementById('rev-text').value.trim(),approved:document.getElementById('rev-approved').checked,featured:document.getElementById('rev-featured').checked};
+        if(!d.patient_name||!d.review_text){MH.showToast('Name & review required','error');return;}
+        if(MH.isSupabaseConfigured()){try{if(editingRevId){await MH.supabase.from('reviews').update(d).eq('id',editingRevId);}else{await MH.supabase.from('reviews').insert(d);}}catch(err){MH.showToast(err.message,'error');return;}}
+        else{if(editingRevId){const i=allAdminReviews.findIndex(x=>x.id===editingRevId);if(i!==-1)allAdminReviews[i]={...allAdminReviews[i],...d};}else{d.id=Date.now();allAdminReviews.push(d);}localStorage.setItem('mh_reviews',JSON.stringify(allAdminReviews));}
+        MH.showToast(editingRevId?'Review updated!':'Review added!','success'); closeReviewModal(); await loadAdminReviews();
+      });
+    });
+
+    async function loadAdminReviews(){
+      if(MH.isSupabaseConfigured()){try{const{data}=await MH.supabase.from('reviews').select('*').order('created_at',{ascending:false});allAdminReviews=data||[];}catch(e){allAdminReviews=[...MH.SAMPLE_REVIEWS];}}
+      else{const s=localStorage.getItem('mh_reviews');allAdminReviews=s?JSON.parse(s):[...MH.SAMPLE_REVIEWS];}
+      renderReviewsTable(allAdminReviews); document.getElementById('reviews-count').textContent=allAdminReviews.length;
+    }
+
+    function renderReviewsTable(revs){
+      const tb=document.getElementById('reviews-tbody');
+      if(!revs.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--clr-gray-400)">No reviews.</td></tr>';return;}
+      tb.innerHTML=revs.map(r=>`<tr>
+        <td><div class="table-name">${r.patient_name}</div></td>
+        <td>${r.treatment||'—'}</td>
+        <td style="color:var(--clr-accent-gold)">${'★'.repeat(r.rating||5)}</td>
+        <td style="max-width:250px"><div style="font-size:12px;color:var(--clr-gray-500);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(r.review_text||'').substring(0,80)}...</div></td>
+        <td><span class="table-status ${r.approved?'active':'pending'}">${r.approved?'● Approved':'● Pending'}</span></td>
+        <td><span class="table-status ${r.featured?'featured':''}">${r.featured?'★':'—'}</span></td>
+        <td><div class="table-actions"><button class="table-action-btn edit" onclick="openEditReview(${r.id})">✏️</button><button class="table-action-btn delete" onclick="confirmDeleteReview(${r.id},'${(r.patient_name||'').replace(/'/g,"\\'")}')">🗑️</button></div></td>
+      </tr>`).join('');
+    }
+
+    function openAddReview(){editingRevId=null;document.getElementById('review-form').reset();document.getElementById('review-modal-title').textContent='Add Review';document.getElementById('review-modal').classList.add('active');}
+    function openEditReview(id){const r=allAdminReviews.find(x=>x.id===id);if(!r)return;editingRevId=id;document.getElementById('review-modal-title').textContent='Edit Review';document.getElementById('rev-name').value=r.patient_name||'';document.getElementById('rev-treatment').value=r.treatment||'';document.getElementById('rev-rating').value=r.rating||5;document.getElementById('rev-text').value=r.review_text||'';document.getElementById('rev-approved').checked=r.approved!==false;document.getElementById('rev-featured').checked=r.featured===true;document.getElementById('review-modal').classList.add('active');}
+    function closeReviewModal(){document.getElementById('review-modal').classList.remove('active');editingRevId=null;}
+    function confirmDeleteReview(id,name){document.getElementById('delete-rev-name').textContent=name;document.getElementById('delete-rev-modal').classList.add('active');document.getElementById('confirm-delete-rev').onclick=async()=>{if(MH.isSupabaseConfigured()){await MH.supabase.from('reviews').delete().eq('id',id);}else{allAdminReviews=allAdminReviews.filter(x=>x.id!==id);localStorage.setItem('mh_reviews',JSON.stringify(allAdminReviews));}MH.showToast('Review deleted','success');document.getElementById('delete-rev-modal').classList.remove('active');await loadAdminReviews();};}
+  </script>
+</body>
+</html>

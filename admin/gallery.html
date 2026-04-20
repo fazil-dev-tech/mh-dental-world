@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Gallery — MH Dental World Admin</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8627c'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-weight='800' font-family='serif'>MH</text></svg>">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="sidebar-brand"><div class="sb-icon">MH</div><div class="sb-text"><h3>MH Dental World</h3><span>Admin Portal</span></div></div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div><a href="dashboard.html" class="sidebar-link"><span class="link-icon">📊</span> Dashboard</a>
+        <div class="sidebar-section-label">Content Management</div><a href="doctors.html" class="sidebar-link"><span class="link-icon">👨‍⚕️</span> Doctors</a><a href="services.html" class="sidebar-link"><span class="link-icon">🦷</span> Services</a><a href="reviews.html" class="sidebar-link"><span class="link-icon">⭐</span> Reviews</a><a href="gallery.html" class="sidebar-link active"><span class="link-icon">🖼️</span> Gallery</a><a href="banners.html" class="sidebar-link"><span class="link-icon">🎯</span> Hero & Banners</a><a href="faqs.html" class="sidebar-link"><span class="link-icon">❓</span> FAQs</a>
+        <div class="sidebar-section-label">Settings</div><a href="contact.html" class="sidebar-link"><span class="link-icon">📞</span> Contact Info</a><a href="settings.html" class="sidebar-link"><span class="link-icon">⚙️</span> Clinic Settings</a>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar">A</div><div class="user-info"><div class="user-name">Admin</div><div class="user-role">Super Admin</div></div><button class="sidebar-logout" id="admin-logout">🚪</button></div></div>
+    </aside>
+    <main class="admin-main">
+      <header class="admin-topbar"><div class="topbar-left"><button class="sidebar-toggle" id="sidebar-toggle">☰</button><div><h2>Manage Gallery</h2><span class="topbar-breadcrumb">Upload and manage clinic images</span></div></div><button class="btn btn-primary btn-sm" onclick="openAddGallery()">+ Upload Image</button></header>
+      <div class="admin-content">
+        <div class="admin-table-wrapper">
+          <div class="admin-table-header"><h3>Gallery Items (<span id="gallery-count">0</span>)</h3></div>
+          <div style="padding:var(--sp-6)">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--sp-4)" id="gallery-admin-grid">
+              <div style="text-align:center;padding:40px;color:var(--clr-gray-400);grid-column:1/-1">Loading...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="admin-modal-overlay" id="gallery-modal">
+    <div class="admin-modal" style="max-width:500px">
+      <div class="admin-modal-header"><h3 id="gallery-modal-title">Upload Image</h3><button class="modal-close" onclick="closeGModal()">✕</button></div>
+      <form id="gallery-form">
+        <div class="admin-modal-body">
+          <div class="form-group">
+            <label class="form-label">Image</label>
+            <div class="image-upload-area" id="gal-upload-area" onclick="document.getElementById('gal-file').click()">
+              <img src="" class="upload-preview" id="gal-preview" style="display:none"><div class="upload-icon">📷</div><div class="upload-text">Click to upload</div><div class="upload-hint">JPG, PNG up to 5MB</div>
+            </div>
+            <input type="file" id="gal-file" accept="image/*" style="display:none">
+          </div>
+          <div class="form-group"><label class="form-label">Title</label><input type="text" class="form-input" id="gal-title" placeholder="Image title"></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Category</label><select class="form-input form-select" id="gal-category"><option value="clinic">Clinic</option><option value="equipment">Equipment</option><option value="team">Team</option><option value="other">Other</option></select></div>
+            <div class="form-group"><label class="form-label">Alt Text</label><input type="text" class="form-input" id="gal-alt" placeholder="Image description"></div>
+          </div>
+        </div>
+        <div class="admin-modal-footer"><button type="button" class="btn btn-ghost" onclick="closeGModal()">Cancel</button><button type="submit" class="btn btn-primary">Save</button></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../assets/js/supabase-config.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/admin-auth.js"></script>
+  <script src="../assets/js/gallery.js"></script>
+  <script>
+    let allAdminGallery=[], editingGalId=null;
+    document.addEventListener('DOMContentLoaded',async()=>{
+      const u=await MH.requireAuth();if(!u)return;MH.initAdminSidebar();await loadAdminGallery();
+      document.getElementById('gal-file').addEventListener('change',e=>{const f=e.target.files[0];if(f){const r=new FileReader();r.onload=ev=>{document.getElementById('gal-preview').src=ev.target.result;document.getElementById('gal-preview').style.display='block';document.getElementById('gal-upload-area').classList.add('has-image');};r.readAsDataURL(f);}});
+      document.getElementById('gallery-form').addEventListener('submit',async e=>{
+        e.preventDefault();
+        const d={title:document.getElementById('gal-title').value.trim(),category:document.getElementById('gal-category').value,alt:document.getElementById('gal-alt').value.trim()};
+        const file=document.getElementById('gal-file').files[0];
+        if(file&&MH.isSupabaseConfigured()){const p=`gallery/${Date.now()}-${file.name}`;const{error}=await MH.supabase.storage.from('clinic-images').upload(p,file);if(!error){const{data:{publicUrl}}=MH.supabase.storage.from('clinic-images').getPublicUrl(p);d.image_url=publicUrl;d.image_path=p;}}
+        else if(file){d.image_url=document.getElementById('gal-preview').src;}
+        if(MH.isSupabaseConfigured()){try{if(editingGalId){await MH.supabase.from('gallery').update(d).eq('id',editingGalId);}else{await MH.supabase.from('gallery').insert(d);}}catch(err){MH.showToast(err.message,'error');return;}}
+        else{if(editingGalId){const i=allAdminGallery.findIndex(x=>x.id===editingGalId);if(i!==-1)allAdminGallery[i]={...allAdminGallery[i],...d};}else{d.id=Date.now();allAdminGallery.push(d);}localStorage.setItem('mh_gallery',JSON.stringify(allAdminGallery));}
+        MH.showToast(editingGalId?'Updated!':'Uploaded!','success');closeGModal();await loadAdminGallery();
+      });
+    });
+    async function loadAdminGallery(){
+      if(MH.isSupabaseConfigured()){try{const{data}=await MH.supabase.from('gallery').select('*').order('created_at',{ascending:false});allAdminGallery=data||[];}catch(e){allAdminGallery=[...MH.SAMPLE_GALLERY];}}
+      else{const s=localStorage.getItem('mh_gallery');allAdminGallery=s?JSON.parse(s):[...MH.SAMPLE_GALLERY];}
+      renderGalleryGrid();document.getElementById('gallery-count').textContent=allAdminGallery.length;
+    }
+    function renderGalleryGrid(){
+      const g=document.getElementById('gallery-admin-grid');
+      if(!allAdminGallery.length){g.innerHTML='<div style="text-align:center;padding:40px;color:var(--clr-gray-400);grid-column:1/-1">No images yet.</div>';return;}
+      g.innerHTML=allAdminGallery.map(item=>`<div style="position:relative;border-radius:var(--radius-lg);overflow:hidden;aspect-ratio:1;background:var(--clr-gray-100)">
+        <img src="${item.image_url}" alt="${item.alt||item.title||''}" style="width:100%;height:100%;object-fit:cover">
+        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.7));padding:8px 12px;color:white">
+          <div style="font-size:12px;font-weight:600">${item.title||'Untitled'}</div>
+          <div style="font-size:10px;opacity:0.7">${item.category||''}</div>
+        </div>
+        <button onclick="deleteGalleryItem(${item.id})" style="position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(239,68,68,0.9);color:white;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">✕</button>
+      </div>`).join('');
+    }
+    function openAddGallery(){editingGalId=null;document.getElementById('gallery-form').reset();document.getElementById('gal-preview').style.display='none';document.getElementById('gal-upload-area').classList.remove('has-image');document.getElementById('gallery-modal-title').textContent='Upload Image';document.getElementById('gallery-modal').classList.add('active');}
+    function closeGModal(){document.getElementById('gallery-modal').classList.remove('active');editingGalId=null;}
+    async function deleteGalleryItem(id){if(!confirm('Delete this image?'))return;if(MH.isSupabaseConfigured()){const item=allAdminGallery.find(x=>x.id===id);if(item?.image_path)await MH.supabase.storage.from('clinic-images').remove([item.image_path]);await MH.supabase.from('gallery').delete().eq('id',id);}else{allAdminGallery=allAdminGallery.filter(x=>x.id!==id);localStorage.setItem('mh_gallery',JSON.stringify(allAdminGallery));}MH.showToast('Image deleted','success');await loadAdminGallery();}
+  </script>
+</body>
+</html>

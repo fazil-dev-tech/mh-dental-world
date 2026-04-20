@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Doctors — MH Dental World Admin</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8627c'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-weight='800' font-family='serif'>MH</text></svg>">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="sidebar-brand"><div class="sb-icon">MH</div><div class="sb-text"><h3>MH Dental World</h3><span>Admin Portal</span></div></div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <a href="dashboard.html" class="sidebar-link"><span class="link-icon">📊</span> Dashboard</a>
+        <div class="sidebar-section-label">Content Management</div>
+        <a href="doctors.html" class="sidebar-link active"><span class="link-icon">👨‍⚕️</span> Doctors</a>
+        <a href="services.html" class="sidebar-link"><span class="link-icon">🦷</span> Services</a>
+        <a href="reviews.html" class="sidebar-link"><span class="link-icon">⭐</span> Reviews</a>
+        <a href="gallery.html" class="sidebar-link"><span class="link-icon">🖼️</span> Gallery</a>
+        <a href="banners.html" class="sidebar-link"><span class="link-icon">🎯</span> Hero & Banners</a>
+        <a href="faqs.html" class="sidebar-link"><span class="link-icon">❓</span> FAQs</a>
+        <div class="sidebar-section-label">Settings</div>
+        <a href="contact.html" class="sidebar-link"><span class="link-icon">📞</span> Contact Info</a>
+        <a href="settings.html" class="sidebar-link"><span class="link-icon">⚙️</span> Clinic Settings</a>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar">A</div><div class="user-info"><div class="user-name">Admin</div><div class="user-role">Super Admin</div></div><button class="sidebar-logout" id="admin-logout" title="Logout">🚪</button></div></div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+          <div><h2>Manage Doctors</h2><span class="topbar-breadcrumb">Add, edit, and manage doctor profiles</span></div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openAddDoctor()">+ Add Doctor</button>
+      </header>
+
+      <div class="admin-content">
+        <!-- Table -->
+        <div class="admin-table-wrapper">
+          <div class="admin-table-header">
+            <h3>All Doctors (<span id="doctors-count">0</span>)</h3>
+            <div class="admin-table-actions">
+              <div class="admin-search">
+                <span>🔍</span>
+                <input type="text" id="doctor-search" placeholder="Search doctors...">
+              </div>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Doctor</th>
+                  <th>Specialization</th>
+                  <th>Experience</th>
+                  <th>Status</th>
+                  <th>Featured</th>
+                  <th>Order</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="doctors-tbody">
+                <tr><td colspan="7" style="text-align:center;padding:40px;color:var(--clr-gray-400)"><div class="spinner" style="margin:0 auto 12px"></div>Loading doctors...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══ ADD/EDIT DOCTOR MODAL ═══ -->
+  <div class="admin-modal-overlay" id="doctor-modal">
+    <div class="admin-modal" style="max-width:780px">
+      <div class="admin-modal-header">
+        <h3 id="doctor-modal-title">Add New Doctor</h3>
+        <button class="modal-close" onclick="closeDoctorModal()">✕</button>
+      </div>
+      <form id="doctor-form">
+        <div class="admin-modal-body">
+          <!-- Image Upload -->
+          <div class="form-group">
+            <label class="form-label">Doctor Photo</label>
+            <div class="image-upload-area" id="doc-upload-area">
+              <img src="" alt="" class="upload-preview" id="doc-image-preview" style="display:none">
+              <div class="upload-icon">📷</div>
+              <div class="upload-text">Click to upload doctor photo</div>
+              <div class="upload-hint">JPG, PNG up to 5MB. Recommended: 600×800px</div>
+            </div>
+            <input type="file" id="doc-image-input" accept="image/*" style="display:none">
+          </div>
+
+          <!-- Name & Designation -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="doc-fullname">Full Name *</label>
+              <input type="text" class="form-input" id="doc-fullname" placeholder="Dr. Full Name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="doc-designation">Designation *</label>
+              <input type="text" class="form-input" id="doc-designation" placeholder="e.g. Chief Dental Surgeon">
+            </div>
+          </div>
+
+          <!-- Specialization & Experience -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="doc-specialization">Specialization</label>
+              <input type="text" class="form-input" id="doc-specialization" placeholder="e.g. Oral & Maxillofacial Surgery">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="doc-experience">Years of Experience</label>
+              <input type="number" class="form-input" id="doc-experience" placeholder="e.g. 12" min="0">
+            </div>
+          </div>
+
+          <!-- Qualifications & Certifications -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="doc-qualifications">Qualifications</label>
+              <input type="text" class="form-input" id="doc-qualifications" placeholder="e.g. BDS, MDS (Oral Surgery)">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="doc-certifications">Certifications</label>
+              <input type="text" class="form-input" id="doc-certifications" placeholder="e.g. Indian Dental Association">
+            </div>
+          </div>
+
+          <!-- Short Summary -->
+          <div class="form-group">
+            <label class="form-label" for="doc-summary">Short Summary</label>
+            <textarea class="form-textarea" id="doc-summary" placeholder="A brief one-liner about the doctor..." style="min-height:70px"></textarea>
+          </div>
+
+          <!-- Full Biography -->
+          <div class="form-group">
+            <label class="form-label" for="doc-biography">Full Biography</label>
+            <textarea class="form-textarea" id="doc-biography" placeholder="Detailed biography of the doctor..."></textarea>
+          </div>
+
+          <!-- Expertise -->
+          <div class="form-group">
+            <label class="form-label" for="doc-expertise">Expertise / Treatment Specialties</label>
+            <input type="text" class="form-input" id="doc-expertise" placeholder="e.g. Dental Implants, Wisdom Tooth Surgery, Jaw Surgery">
+          </div>
+
+          <!-- Languages & Timings -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="doc-languages">Languages Spoken</label>
+              <input type="text" class="form-input" id="doc-languages" placeholder="e.g. English, Tamil, Hindi">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="doc-timings">Consultation Timings</label>
+              <input type="text" class="form-input" id="doc-timings" placeholder="e.g. Mon–Sat: 10 AM – 8 PM">
+            </div>
+          </div>
+
+          <!-- Display Order -->
+          <div class="form-group">
+            <label class="form-label" for="doc-order">Display Order / Priority</label>
+            <input type="number" class="form-input" id="doc-order" placeholder="1" min="1" style="max-width:150px">
+          </div>
+
+          <!-- Toggles -->
+          <div style="display:flex;gap:var(--sp-8);flex-wrap:wrap;margin-top:var(--sp-4)">
+            <div style="display:flex;align-items:center;gap:var(--sp-3)">
+              <label class="toggle-switch">
+                <input type="checkbox" id="doc-active" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <span style="font-size:var(--fs-sm);font-weight:500">Active</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:var(--sp-3)">
+              <label class="toggle-switch">
+                <input type="checkbox" id="doc-featured">
+                <span class="toggle-slider"></span>
+              </label>
+              <span style="font-size:var(--fs-sm);font-weight:500">Featured</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:var(--sp-3)">
+              <label class="toggle-switch">
+                <input type="checkbox" id="doc-availability" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <span style="font-size:var(--fs-sm);font-weight:500">Available for Consultation</span>
+            </div>
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="btn btn-ghost" onclick="closeDoctorModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Doctor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══ DELETE CONFIRM MODAL ═══ -->
+  <div class="admin-modal-overlay" id="delete-modal">
+    <div class="admin-modal" style="max-width:440px">
+      <div class="confirm-dialog">
+        <div class="confirm-icon">🗑️</div>
+        <h3>Delete Doctor?</h3>
+        <p>Are you sure you want to delete <strong id="delete-doctor-name"></strong>? This action cannot be undone.</p>
+        <div class="confirm-actions">
+          <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
+          <button class="btn btn-danger" id="confirm-delete-btn">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/supabase-config.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/admin-auth.js"></script>
+  <script src="../assets/js/doctors.js"></script>
+  <script src="../assets/js/admin-doctors.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await MH.requireAuth();
+      if (!user) return;
+      MH.initAdminSidebar();
+      await MH.initAdminDoctors();
+    });
+  </script>
+</body>
+</html>

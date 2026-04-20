@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Info — MH Dental World Admin</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8627c'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-weight='800' font-family='serif'>MH</text></svg>">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="sidebar-brand"><div class="sb-icon">MH</div><div class="sb-text"><h3>MH Dental World</h3><span>Admin Portal</span></div></div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div><a href="dashboard.html" class="sidebar-link"><span class="link-icon">📊</span> Dashboard</a>
+        <div class="sidebar-section-label">Content Management</div><a href="doctors.html" class="sidebar-link"><span class="link-icon">👨‍⚕️</span> Doctors</a><a href="services.html" class="sidebar-link"><span class="link-icon">🦷</span> Services</a><a href="reviews.html" class="sidebar-link"><span class="link-icon">⭐</span> Reviews</a><a href="gallery.html" class="sidebar-link"><span class="link-icon">🖼️</span> Gallery</a><a href="banners.html" class="sidebar-link"><span class="link-icon">🎯</span> Hero & Banners</a><a href="faqs.html" class="sidebar-link"><span class="link-icon">❓</span> FAQs</a>
+        <div class="sidebar-section-label">Settings</div><a href="contact.html" class="sidebar-link active"><span class="link-icon">📞</span> Contact Info</a><a href="settings.html" class="sidebar-link"><span class="link-icon">⚙️</span> Clinic Settings</a>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-user"><div class="user-avatar">A</div><div class="user-info"><div class="user-name">Admin</div><div class="user-role">Super Admin</div></div><button class="sidebar-logout" id="admin-logout">🚪</button></div></div>
+    </aside>
+    <main class="admin-main">
+      <header class="admin-topbar"><div class="topbar-left"><button class="sidebar-toggle" id="sidebar-toggle">☰</button><div><h2>Contact Information</h2><span class="topbar-breadcrumb">Update clinic contact details</span></div></div><button class="btn btn-primary btn-sm" onclick="saveContactInfo()">💾 Save Changes</button></header>
+      <div class="admin-content">
+        <div class="admin-table-wrapper" style="margin-bottom:var(--sp-8)">
+          <div class="admin-table-header"><h3>📞 Contact Details</h3></div>
+          <div style="padding:var(--sp-6)">
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Primary Phone</label><input type="text" class="form-input" id="ci-phone" value="+91 98456 61301"></div>
+              <div class="form-group"><label class="form-label">WhatsApp Number</label><input type="text" class="form-input" id="ci-whatsapp" value="919845661301"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input" id="ci-email" value="info@mhdentalworld.com"></div>
+              <div class="form-group"><label class="form-label">Emergency Phone</label><input type="text" class="form-input" id="ci-emergency" value="+91 98456 61301"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-table-wrapper" style="margin-bottom:var(--sp-8)">
+          <div class="admin-table-header"><h3>📍 Location</h3></div>
+          <div style="padding:var(--sp-6)">
+            <div class="form-group"><label class="form-label">Full Address</label><textarea class="form-textarea" id="ci-address" style="min-height:70px">MH Dental World, Your Address Here</textarea></div>
+            <div class="form-group"><label class="form-label">Google Maps Link</label><input type="url" class="form-input" id="ci-maps" value="https://maps.app.goo.gl/q8VG74xzfcwafMmp6?g_st=aw"></div>
+          </div>
+        </div>
+
+        <div class="admin-table-wrapper" style="margin-bottom:var(--sp-8)">
+          <div class="admin-table-header"><h3>🕐 Clinic Timings</h3></div>
+          <div style="padding:var(--sp-6)">
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Weekday Timings</label><input type="text" class="form-input" id="ci-weekday" value="Mon–Sat: 9:00 AM – 9:00 PM"></div>
+              <div class="form-group"><label class="form-label">Weekend/Sunday Timings</label><input type="text" class="form-input" id="ci-weekend" value="Sun: 10:00 AM – 2:00 PM"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-table-wrapper">
+          <div class="admin-table-header"><h3>🌐 Social Media</h3></div>
+          <div style="padding:var(--sp-6)">
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Instagram URL</label><input type="url" class="form-input" id="ci-instagram" value="https://www.instagram.com/mhdentalworld?igsh=MmRsb2d2OWhsZWo5"></div>
+              <div class="form-group"><label class="form-label">Facebook URL</label><input type="url" class="form-input" id="ci-facebook" placeholder="https://facebook.com/mhdentalworld"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">YouTube URL</label><input type="url" class="form-input" id="ci-youtube" placeholder="https://youtube.com/..."></div>
+              <div class="form-group"><label class="form-label">Google Reviews URL</label><input type="url" class="form-input" id="ci-google" placeholder="https://g.page/..."></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="../assets/js/supabase-config.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/admin-auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded',async()=>{const u=await MH.requireAuth();if(!u)return;MH.initAdminSidebar();loadContactInfo();});
+    function loadContactInfo(){const s=localStorage.getItem('mh_contact');if(s){const d=JSON.parse(s);Object.entries(d).forEach(([k,v])=>{const el=document.getElementById('ci-'+k);if(el)el.value=v;});}}
+    function saveContactInfo(){const fields=['phone','whatsapp','email','emergency','address','maps','weekday','weekend','instagram','facebook','youtube','google'];const d={};fields.forEach(f=>{const el=document.getElementById('ci-'+f);if(el)d[f]=el.value;});localStorage.setItem('mh_contact',JSON.stringify(d));MH.showToast('Contact info saved!','success');}
+  </script>
+</body>
+</html>

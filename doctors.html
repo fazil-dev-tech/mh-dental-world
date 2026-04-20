@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Doctors — MH Dental World | Expert Dental Specialists</title>
+  <meta name="description" content="Meet the expert dental specialists at MH Dental World. Board-certified surgeons, orthodontists, and cosmetic dentistry professionals.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8627c'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='16' font-weight='800' font-family='serif'>MH</text></svg>">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <nav class="navbar" id="navbar"><div class="container"><a href="index.html" class="nav-brand"><div class="logo-icon">MH</div><div class="brand-text"><span class="brand-name">MH Dental World</span><span class="brand-tagline">Advanced Dental Care</span></div></a><div class="nav-links" id="nav-links"><a href="index.html" class="nav-link">Home</a><a href="about.html" class="nav-link">About</a><a href="services.html" class="nav-link">Services</a><a href="doctors.html" class="nav-link active">Our Doctors</a><a href="gallery.html" class="nav-link">Gallery</a><a href="reviews.html" class="nav-link">Reviews</a><a href="contact.html" class="nav-link">Contact</a><div class="nav-cta"><a href="tel:+919845661301" class="btn btn-primary btn-sm">📞 Call Now</a></div></div><div class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></div></div></nav>
+
+  <div class="page-header"><div class="container"><h1 class="page-title">Our Dental Experts</h1><div class="breadcrumb"><a href="index.html">Home</a><span class="sep">/</span><span>Our Doctors</span></div></div></div>
+
+  <section class="section bg-white">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-badge"><span class="badge-dot"></span> Meet the Team</div>
+        <h2 class="section-title">Expert Care, Gentle Hands</h2>
+        <p class="section-subtitle">Our team of highly qualified dental professionals brings years of specialized training and a passion for creating perfect smiles.</p>
+      </div>
+      <div class="grid-3 stagger-children" id="doctors-grid"></div>
+    </div>
+  </section>
+
+  <section class="section" style="background:linear-gradient(135deg, var(--clr-primary) 0%, var(--clr-primary-dark) 100%);text-align:center;color:white">
+    <div class="container reveal">
+      <h2 style="color:white;font-size:var(--fs-3xl);margin-bottom:var(--sp-4)">Need Expert Dental Advice?</h2>
+      <p style="color:rgba(255,255,255,0.85);max-width:500px;margin:0 auto var(--sp-8)">Speak directly with our specialists. Call or WhatsApp us now.</p>
+      <div style="display:flex;gap:var(--sp-4);justify-content:center;flex-wrap:wrap">
+        <a href="tel:+919845661301" class="btn btn-lg" style="background:white;color:var(--clr-primary)">📞 Call</a>
+        <a href="https://wa.me/919845661301" class="btn btn-whatsapp btn-lg" target="_blank">💬 WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="footer-logo"><div class="footer-logo-icon">MH</div><span class="footer-logo-text">MH Dental World</span></div><p>Premium dental care you can trust.</p><div class="footer-social"><a href="https://www.instagram.com/mhdentalworld?igsh=MmRsb2d2OWhsZWo5" target="_blank">📷</a><a href="https://wa.me/919845661301" target="_blank">💬</a><a href="tel:+919845661301">📞</a></div></div><div class="footer-col"><h4>Quick Links</h4><ul><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="doctors.html">Doctors</a></li><li><a href="contact.html">Contact</a></li></ul></div><div class="footer-col"><h4>Contact</h4><ul><li><a href="tel:+919845661301">📞 +91 98456 61301</a></li><li><a href="mailto:info@mhdentalworld.com">📧 info@mhdentalworld.com</a></li></ul></div></div><div class="footer-bottom"><span>© 2026 MH Dental World.</span><div class="footer-legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div></div></footer>
+  <a href="https://wa.me/919845661301" class="floating-whatsapp" target="_blank">💬</a>
+  <div class="mobile-sticky-cta"><a href="tel:+919845661301" class="btn btn-call">📞 Call</a><a href="https://wa.me/919845661301" class="btn btn-whatsapp" target="_blank">💬 WhatsApp</a></div>
+
+  <script src="assets/js/supabase-config.js?v=15"></script>
+  <script src="assets/js/main.js?v=15"></script>
+  <script src="assets/js/doctors.js?v=15"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await MH.loadDoctors({ containerId: 'doctors-grid' });
+      initScrollReveal();
+    });
+  </script>
+</body>
+</html>
