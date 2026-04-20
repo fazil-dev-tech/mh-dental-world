@@ -1,6 +1,20 @@
-# 🦷 MH Dental World — Premium Dental Clinic Website
+<div align="center">
+  <h1>🦷 MH Dental World</h1>
+  <p><strong>A Premium, Production-Ready Dental Clinic Platform & Admin Portal</strong></p>
 
-A world-class, production-grade premium dental clinic website with a fully functional admin portal. Built with **vanilla HTML/CSS/JavaScript** and **Supabase** backend.
+  ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+  ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+  ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+  ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+  ![License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)
+
+</div>
+
+---
+
+## 📖 Overview
+
+**MH Dental World** is a world-class, production-grade premium dental clinic websuite complete with a fully functional authenticated admin portal. Built with **Vanilla HTML/CSS/JavaScript** and powered by a backend **Supabase** (PostgreSQL) instance, it ensures blistering fast static load times alongside dynamic data capabilities in a resilient architecture.
 
 ---
 
@@ -8,178 +22,103 @@ A world-class, production-grade premium dental clinic website with a fully funct
 
 | Layer | Technology |
 |-------|-----------|
-| **Frontend** | HTML5, CSS3, Vanilla JavaScript |
-| **Styling** | Custom CSS Design System (Glassmorphism, Animations, Responsive) |
+| **Frontend UI** | HTML5, CSS3, Vanilla JavaScript |
+| **Styling** | Custom CSS Design System (Glassmorphism, Viewport Animations, Responsive Grids) |
 | **Typography** | Google Fonts (Playfair Display, Inter, Outfit) |
-| **Backend** | Supabase (Auth, PostgreSQL, Storage) |
-| **Deployment** | Any static hosting (Netlify, Vercel, GitHub Pages) |
+| **Backend & DB**| Supabase (PostgreSQL Database, API generation) |
+| **Storage** | Supabase Storage (Image tracking and handling) |
+| **Deployment** | Native Static Compatibility (Netlify, Vercel, GitHub Pages) |
 
 ---
 
-## 📁 Project Structure
+## 📱 Platform Features
 
-```
+### The Public Experience (Patient Facing)
+- **Fluid Responsiveness**: Flawlessly adapts from the smallest mobile device to ultrawide desktop monitors.
+- **Premium Aesthetics**: Features a modern glassmorphism design with a Crimson Pink (`#DC3558`) primary token.
+- **Dynamic Content**: Viewport-triggered scroll reveals and animated clinic statistic counters.
+- **Rich Doctor Profiles**: Detailed team pages including specialized expertise and biography views.
+- **Live Patient Reviews**: Rotating carousel pulling verified reviews securely from the backend.
+- **Transformation Gallery**: Interactive lightbox view holding clinical case studies and high-quality clinic photos.
+- **Integrated Utilities**: WhatsApp direct chat links, click-to-call integrations, and embedded Google Maps locators.
+
+### The Admin Portal (Management)
+- **Secure Authentication**: Robust dashboard protection powered by Supabase Auth (or local Demo Mode fallback).
+- **Comprehensive CRUD Operations**: Form-based interfaces allowing clinic managers to create, read, update, and delete Doctors, Services, and Reviews.
+- **Dynamic Configuration**: Change SEO clinic settings, phone numbers, and operational timings that instantly reflect across the live platform.
+- **Content Moderation**: Approve or curate patient reviews to dictate which show on the public homepage.
+
+---
+
+## 📁 Repository Structure
+
+```text
 MH DENTAL WORLD/
-├── index.html               # Homepage
-├── about.html               # About Us
-├── services.html            # Dental Services
-├── doctors.html             # Our Doctors
-├── doctor-detail.html       # Doctor Profile Page
-├── gallery.html             # Clinic Gallery
-├── reviews.html             # Patient Reviews
-├── before-after.html        # Smile Transformations
-├── contact.html             # Contact Information
-├── faq.html                 # Frequently Asked Questions
-├── emergency.html           # Emergency Dental Care
-├── privacy.html             # Privacy Policy
-├── terms.html               # Terms & Conditions
-├── 404.html                 # Custom Error Page
-├── supabase-schema.sql      # Database Schema
-│
-├── admin/                   # Admin Portal
-│   ├── login.html           # Admin Login
-│   ├── dashboard.html       # Dashboard
-│   ├── doctors.html         # Manage Doctors
-│   ├── services.html        # Manage Services
-│   ├── reviews.html         # Manage Reviews
-│   ├── gallery.html         # Manage Gallery
-│   ├── banners.html         # Hero & Banners
-│   ├── faqs.html            # Manage FAQs
-│   ├── contact.html         # Contact Info
-│   └── settings.html        # Clinic Settings
-│
-├── assets/
-│   ├── css/
-│   │   ├── main.css         # Design System & Variables
-│   │   ├── components.css   # UI Component Styles
-│   │   ├── animations.css   # Animations & Scroll Reveal
-│   │   ├── responsive.css   # Responsive Breakpoints
-│   │   └── admin.css        # Admin Portal Styles
-│   │
-│   ├── js/
-│   │   ├── supabase-config.js   # Supabase Client Config
-│   │   ├── main.js              # Core UI Utilities
-│   │   ├── doctors.js           # Doctors Module
-│   │   ├── services.js          # Services Module
-│   │   ├── reviews.js           # Reviews Module
-│   │   ├── gallery.js           # Gallery Module
-│   │   ├── admin-auth.js        # Admin Authentication
-│   │   ├── admin-dashboard.js   # Dashboard Stats
-│   │   └── admin-doctors.js     # Doctor CRUD Management
-│   │
-│   └── images/
-│       └── gallery/             # Clinic Photos
-│
-└── IMAGES/                  # Original Uploads
+├── index.html               # Main Landing Page
+├── about.html               # About & Clinic Heritage
+├── services.html            # Dental Catalog
+├── doctors.html             # The Medical Team
+├── doctor-detail.html       # Individual Doctor Schema Views
+├── gallery.html             # The Visual Gallery
+├── reviews.html             # Patient Testimonials
+├── admin/                   # 🔒 The Secured Admin Dashboard
+│   ├── login.html           
+│   └── dashboard.html       
+├── assets/                  
+│   ├── css/                 # Global UI Design Tokens
+│   ├── js/                  # Component logic and Supabase Config
+│   └── images/              # Static bundled images
+├── supabase-schema.sql      # Remote Database Structural Commands
+└── IMAGES/                  # Unprocessed client source files
 ```
 
 ---
 
-## 🎨 Design System
+## 🚀 Quick Start Local Development
 
-| Token | Value |
-|-------|-------|
-| **Primary** | Crimson Pink `#DC3558` |
-| **Heading Font** | Playfair Display (Serif) |
-| **Body Font** | Inter (Sans-serif) |
-| **Accent Font** | Outfit (Sans-serif) |
-| **Backgrounds** | Blush `#fff0f3`, Rose `#ffe4ea`, Cream `#fffbfc` |
-| **Glass Effect** | `rgba(255,255,255,0.65)` + `blur(20px)` |
+Because the core is static vanilla HTML/JS, running this project locally requires zero build tools or bundling steps!
 
----
-
-## 🚀 Quick Start
-
-### 1. Clone & Serve
+### 1. Serve the Directory
+You can use any standard HTTP server package.
 ```bash
-# Using any static server
+# Using Node/NPM
 npx http-server . -p 3000
 
-# Or Python
+# Using Python
 python -m http.server 3000
 ```
+Then simply open `http://localhost:3000` in your web browser.
 
-### 2. Open in browser
-```
-http://localhost:3000
-```
-
-### 3. Admin Portal
-```
-http://localhost:3000/admin/login.html
-
-# Demo credentials:
-Email: admin@mhdentalworld.com
-Password: admin123
-```
+### 2. Enter the Admin System
+Navigate your browser to `http://localhost:3000/admin/login.html` to view the administration systems.
 
 ---
 
-## 🔗 Supabase Setup (Optional)
+## 🔗 Supabase Backend Configuration
 
-The site works fully in **demo mode** with localStorage. To connect a real database:
+This website is pre-configured to communicate directly with a **Supabase** backend cluster. The configuration sits cleanly at `assets/js/supabase-config.js`.
 
-### 1. Create a Supabase project at [supabase.com](https://supabase.com)
-
-### 2. Run the SQL schema
-Copy and paste `supabase-schema.sql` into the Supabase SQL Editor.
-
-### 3. Create Storage bucket
-- Bucket name: `clinic-images`
-- Public: **Yes**
-- File size: **5MB**
-- Allowed types: `image/jpeg, image/png, image/webp`
-
-### 4. Update credentials
-Edit `assets/js/supabase-config.js`:
-```javascript
-const SUPABASE_URL = 'https://your-project.supabase.co';
-const SUPABASE_ANON_KEY = 'your-anon-key-here';
-```
+To spin up your own instance:
+1. Create a project at [Supabase.com](https://supabase.com).
+2. Copy the contents of the `supabase-schema.sql` file.
+3. Paste the SQL query into the **Supabase SQL Editor** and execute to instantly provision the required `doctors`, `services`, `reviews`, `gallery`, `faqs`, and `clinic_settings` tables (and apply Row Level Security policies).
+4. Extract your *Project URL* and *Anon Key* from the API settings and insert them into the `.js` config block.
+5. Create a new Storage Bucket called `clinic-images` and set it to Public.
 
 ---
 
-## 📱 Features
+## 🎨 Design System Guide
 
-### Public Website
-- ✅ Responsive design (Mobile → Desktop)
-- ✅ Premium glassmorphism aesthetics
-- ✅ Animated scroll reveals & counters
-- ✅ 12+ dental services catalog
-- ✅ Doctor profiles with detail pages
-- ✅ Patient reviews carousel
-- ✅ Clinic image gallery with lightbox
-- ✅ Before/After smile transformations
-- ✅ FAQ accordion
-- ✅ Emergency dental care page
-- ✅ WhatsApp & call CTAs
-- ✅ Mobile-sticky CTA bar
-- ✅ Google Maps integration
-- ✅ SEO optimized
-
-### Admin Portal
-- ✅ Secure authentication (Supabase Auth + Demo mode)
-- ✅ Dashboard with stats overview
-- ✅ Full CRUD for Doctors (with image upload)
-- ✅ Full CRUD for Services
-- ✅ Full CRUD for Reviews (approve/reject/featured)
-- ✅ Gallery management with image upload
-- ✅ Hero section & banner editor
-- ✅ FAQ management
-- ✅ Contact information editor
-- ✅ Clinic settings & SEO config
-- ✅ Responsive sidebar navigation
+The custom styling system relies heavily on specific variables declared in `main.css`:
+- **Primary Color**: Crimson Pink `#DC3558`
+- **Backgrounds**: Soft variants including Blush `#fff0f3`, Rose `#ffe4ea`, and Cream `#fffbfc`.
+- **Glass Effect**: Defined aggressively using `rgba(255,255,255,0.65)` layered with `backdrop-filter: blur(20px)`.
 
 ---
 
-## 📞 Contact
+## 🤝 Contributing & License
+If you're modifying this platform, ensure you do not break the API configurations when introducing new HTML schemas.
 
-**MH Dental World**
-- 📞 +91 98456 61301
-- 📧 info@mhdentalworld.com
-- 📍 [Google Maps](https://maps.app.goo.gl/q8VG74xzfcwafMmp6?g_st=aw)
-- 📸 [Instagram](https://www.instagram.com/mhdentalworld?igsh=MmRsb2d2OWhsZWo5)
+This project sits under the **MIT License**.
 
----
-
-© 2026 MH Dental World. All rights reserved.
+> *Built to redefine the standard in digital healthcare interfaces.*
