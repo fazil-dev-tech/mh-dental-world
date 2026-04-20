@@ -17,7 +17,7 @@
     address: 'MH Dental World, Bangalore, Karnataka, India',
     mapQuery: 'MH+Dental+World+Bangalore',
     mapEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.0!2d77.5946!3d12.9716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sMH+Dental+World!5e0!3m2!1sen!2sin!4v1',
-    hours: 'Mon–Sat: 9:00 AM – 8:00 PM | Sun: 10:00 AM – 2:00 PM',
+    hours: 'Mon–Sat: 8:00 AM – 10:00 PM | Sun: 10:00 AM – 2:00 PM (Prior Appointment)',
     logo: 'assets/images/logo.jpg'
   };
 
@@ -229,8 +229,8 @@
     addMessage('🕐 Clinic Hours', false);
     botReply(`
       <strong>🕐 Working Hours</strong><br><br>
-      <strong>Mon – Sat:</strong> 9:00 AM – 8:00 PM<br>
-      <strong>Sunday:</strong> 10:00 AM – 2:00 PM<br><br>
+      <strong>Mon – Sat:</strong> 8:00 AM – 10:00 PM<br>
+      <strong>Sunday:</strong> 10:00 AM – 2:00 PM (Prior Appointment Only)<br><br>
       <em>🆘 Emergency services available 24/7</em><br>
       <div class="cb-quick-actions" style="margin-top:10px">
         <a href="tel:${CLINIC.phone}" class="cb-quick-btn cb-contact-btn" style="text-decoration:none">📞 Call to Book</a>

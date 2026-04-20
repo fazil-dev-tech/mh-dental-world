@@ -29,7 +29,7 @@ const CLINIC_DEFAULTS = {
   address: 'MH Dental World, Your Address Here',
   instagram: 'https://www.instagram.com/mhdentalworld?igsh=MmRsb2d2OWhsZWo5',
   maps: 'https://maps.app.goo.gl/q8VG74xzfcwafMmp6?g_st=aw',
-  timings: 'Mon–Sat: 9:00 AM – 9:00 PM | Sun: 10:00 AM – 2:00 PM',
+  timings: 'Mon–Sat: 8:00 AM – 10:00 PM | Sun: 10:00 AM – 2:00 PM (Prior Appointment)',
   emergency_phone: '+91 98456 61301',
 };
 
