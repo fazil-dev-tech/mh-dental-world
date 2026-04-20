@@ -57,8 +57,8 @@
   function injectChatbot() {
     const html = `
       <button class="chatbot-toggle" id="cb-toggle" aria-label="Open chat assistant">
-        <svg class="cb-icon-chat" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/><path d="M7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/></svg>
-        <svg class="cb-icon-close" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        <svg class="cb-icon-chat" viewBox="0 0 48 48" fill="none"><path d="M24 4C13.5 4 5 11.4 5 20.5c0 5.3 3.1 10 7.8 13l-1.6 7.2c-.2.8.7 1.4 1.4 1L21 37c1 .1 2 .2 3 .2 10.5 0 19-7.4 19-16.5S34.5 4 24 4z" fill="white" opacity="0.95"/><path d="M20 14c0-2.2 1.8-4 4-4s4 1.8 4 4v3c0 .6-.4 1-1 1h-1v5c0 .6-.4 1-1 1h-2c-.6 0-1-.4-1-1v-5h-1c-.6 0-1-.4-1-1v-3z" fill="#DC3558" opacity="0.9"/><circle cx="18" cy="28" r="1.5" fill="#DC3558" opacity="0.6"/><circle cx="24" cy="28" r="1.5" fill="#DC3558" opacity="0.6"/><circle cx="30" cy="28" r="1.5" fill="#DC3558" opacity="0.6"/></svg>
+        <svg class="cb-icon-close" viewBox="0 0 24 24" fill="white"><path d="M18.3 5.7a1 1 0 00-1.4 0L12 10.6 7.1 5.7a1 1 0 00-1.4 1.4L10.6 12l-4.9 4.9a1 1 0 001.4 1.4L12 13.4l4.9 4.9a1 1 0 001.4-1.4L13.4 12l4.9-4.9a1 1 0 000-1.4z"/></svg>
       </button>
       <div class="chatbot-window" id="cb-window">
         <div class="cb-header">

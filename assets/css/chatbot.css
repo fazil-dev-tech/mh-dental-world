@@ -6,13 +6,13 @@
 /* Toggle Button */
 .chatbot-toggle {
   position: fixed;
-  bottom: 28px;
+  bottom: 100px;
   right: 28px;
   width: 62px;
   height: 62px;
   border-radius: 50%;
   background: linear-gradient(135deg, #DC3558 0%, #e8627c 100%);
-  border: none;
+  border: 3px solid rgba(255,255,255,0.6);
   cursor: pointer;
   z-index: 9999;
   display: flex;
@@ -33,8 +33,8 @@
 }
 
 .chatbot-toggle svg {
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
   fill: white;
   transition: transform 0.3s ease;
 }
@@ -67,7 +67,7 @@
 /* Chat Window */
 .chatbot-window {
   position: fixed;
-  bottom: 100px;
+  bottom: 172px;
   right: 28px;
   width: 380px;
   max-height: 540px;
