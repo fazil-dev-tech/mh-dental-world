@@ -5,62 +5,27 @@
 
 // Check if user is authenticated, redirect if not
 async function requireAuth() {
-  if (!MH.isSupabaseConfigured()) {
-    // Demo mode: check localStorage
-    const demoAuth = localStorage.getItem('mh_admin_demo');
-    if (!demoAuth) {
-      window.location.href = 'login.html';
-      return null;
-    }
-    return { id: 'demo', email: 'adminmhdental' };
-  }
-
-  try {
-    const { data: { session } } = await MH.supabase.auth.getSession();
-    if (!session) {
-      window.location.href = 'login.html';
-      return null;
-    }
-    return session.user;
-  } catch (e) {
+  const demoAuth = localStorage.getItem('mh_admin_demo');
+  if (!demoAuth) {
     window.location.href = 'login.html';
     return null;
   }
+  return { id: 'admin', email: 'adminmhdental' };
 }
 
 // Login
 async function adminLogin(email, password) {
-  if (!MH.isSupabaseConfigured()) {
-    // Demo mode
-    if (email === 'adminmhdental' && password === 'Admin123#') {
-      localStorage.setItem('mh_admin_demo', 'true');
-      return { success: true };
-    }
-    return { success: false, error: 'Invalid username or password' };
+  // Always use local admin credentials
+  if (email === 'adminmhdental' && password === 'Admin123#') {
+    localStorage.setItem('mh_admin_demo', 'true');
+    return { success: true };
   }
-
-  try {
-    const { data, error } = await MH.supabase.auth.signInWithPassword({ email, password });
-    if (error) return { success: false, error: error.message };
-    return { success: true, user: data.user };
-  } catch (e) {
-    return { success: false, error: 'Login failed. Please try again.' };
-  }
+  return { success: false, error: 'Invalid username or password' };
 }
 
 // Logout
 async function adminLogout() {
-  if (!MH.isSupabaseConfigured()) {
-    localStorage.removeItem('mh_admin_demo');
-    window.location.href = 'login.html';
-    return;
-  }
-
-  try {
-    await MH.supabase.auth.signOut();
-  } catch (e) {
-    console.error('Logout error:', e);
-  }
+  localStorage.removeItem('mh_admin_demo');
   window.location.href = 'login.html';
 }
 

@@ -73,15 +73,15 @@
         e.preventDefault();
         const d={title:document.getElementById('gal-title').value.trim(),category:document.getElementById('gal-category').value,alt:document.getElementById('gal-alt').value.trim()};
         const file=document.getElementById('gal-file').files[0];
-        if(file&&MH.isSupabaseConfigured()){const p=`gallery/${Date.now()}-${file.name}`;const{error}=await MH.supabase.storage.from('clinic-images').upload(p,file);if(!error){const{data:{publicUrl}}=MH.supabase.storage.from('clinic-images').getPublicUrl(p);d.image_url=publicUrl;d.image_path=p;}}
+        if(file&&MH.isAdminConfigured()){const p=`gallery/${Date.now()}-${file.name}`;const{error}=await MH.supabaseAdmin.storage.from('clinic-images').upload(p,file);if(!error){const{data:{publicUrl}}=MH.supabaseAdmin.storage.from('clinic-images').getPublicUrl(p);d.image_url=publicUrl;d.image_path=p;}}
         else if(file){d.image_url=document.getElementById('gal-preview').src;}
-        if(MH.isSupabaseConfigured()){try{if(editingGalId){await MH.supabase.from('gallery').update(d).eq('id',editingGalId);}else{await MH.supabase.from('gallery').insert(d);}}catch(err){MH.showToast(err.message,'error');return;}}
+        if(MH.isAdminConfigured()){try{if(editingGalId){await MH.supabaseAdmin.from('gallery').update(d).eq('id',editingGalId);}else{await MH.supabaseAdmin.from('gallery').insert(d);}}catch(err){MH.showToast(err.message,'error');return;}}
         else{if(editingGalId){const i=allAdminGallery.findIndex(x=>x.id===editingGalId);if(i!==-1)allAdminGallery[i]={...allAdminGallery[i],...d};}else{d.id=Date.now();allAdminGallery.push(d);}localStorage.setItem('mh_gallery',JSON.stringify(allAdminGallery));}
         MH.showToast(editingGalId?'Updated!':'Uploaded!','success');closeGModal();await loadAdminGallery();
       });
     });
     async function loadAdminGallery(){
-      if(MH.isSupabaseConfigured()){try{const{data}=await MH.supabase.from('gallery').select('*').order('created_at',{ascending:false});allAdminGallery=data||[];}catch(e){allAdminGallery=[...MH.SAMPLE_GALLERY];}}
+      if(MH.isAdminConfigured()){try{const{data}=await MH.supabaseAdmin.from('gallery').select('*').order('created_at',{ascending:false});allAdminGallery=data||[];}catch(e){allAdminGallery=[...MH.SAMPLE_GALLERY];}}
       else{const s=localStorage.getItem('mh_gallery');allAdminGallery=s?JSON.parse(s):[...MH.SAMPLE_GALLERY];}
       renderGalleryGrid();document.getElementById('gallery-count').textContent=allAdminGallery.length;
     }
@@ -99,7 +99,7 @@
     }
     function openAddGallery(){editingGalId=null;document.getElementById('gallery-form').reset();document.getElementById('gal-preview').style.display='none';document.getElementById('gal-upload-area').classList.remove('has-image');document.getElementById('gallery-modal-title').textContent='Upload Image';document.getElementById('gallery-modal').classList.add('active');}
     function closeGModal(){document.getElementById('gallery-modal').classList.remove('active');editingGalId=null;}
-    async function deleteGalleryItem(id){if(!confirm('Delete this image?'))return;if(MH.isSupabaseConfigured()){const item=allAdminGallery.find(x=>x.id===id);if(item?.image_path)await MH.supabase.storage.from('clinic-images').remove([item.image_path]);await MH.supabase.from('gallery').delete().eq('id',id);}else{allAdminGallery=allAdminGallery.filter(x=>x.id!==id);localStorage.setItem('mh_gallery',JSON.stringify(allAdminGallery));}MH.showToast('Image deleted','success');await loadAdminGallery();}
+    async function deleteGalleryItem(id){if(!confirm('Delete this image?'))return;if(MH.isAdminConfigured()){const item=allAdminGallery.find(x=>x.id===id);if(item?.image_path)await MH.supabaseAdmin.storage.from('clinic-images').remove([item.image_path]);await MH.supabaseAdmin.from('gallery').delete().eq('id',id);}else{allAdminGallery=allAdminGallery.filter(x=>x.id!==id);localStorage.setItem('mh_gallery',JSON.stringify(allAdminGallery));}MH.showToast('Image deleted','success');await loadAdminGallery();}
   </script>
 </body>
 </html>

@@ -90,7 +90,7 @@
     document.addEventListener('DOMContentLoaded',async()=>{
       const u=await MH.requireAuth();if(!u)return;MH.initAdminSidebar();
       const status=document.getElementById('supabase-status');
-      if(MH.isSupabaseConfigured()){status.textContent='✅ Connected';status.style.color='var(--clr-success)';}
+      if(MH.isAdminConfigured()){status.textContent='✅ Connected';status.style.color='var(--clr-success)';}
       else{status.textContent='⚠️ Not Connected (Demo Mode)';status.style.color='var(--clr-warning)';}
       loadSettings();
     });

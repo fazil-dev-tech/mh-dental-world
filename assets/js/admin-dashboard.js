@@ -9,14 +9,14 @@ async function initAdminDashboard() {
 async function loadDashboardStats() {
   let stats = { doctors: 0, services: 0, reviews: 0, gallery: 0, pendingReviews: 0 };
 
-  if (MH.isSupabaseConfigured()) {
+  if (MH.isAdminConfigured()) {
     try {
       const [docs, svcs, revs, gal, pending] = await Promise.all([
-        MH.supabase.from('doctors').select('id', { count: 'exact' }),
-        MH.supabase.from('services').select('id', { count: 'exact' }),
-        MH.supabase.from('reviews').select('id', { count: 'exact' }).eq('approved', true),
-        MH.supabase.from('gallery').select('id', { count: 'exact' }),
-        MH.supabase.from('reviews').select('id', { count: 'exact' }).eq('approved', false),
+        MH.supabaseAdmin.from('doctors').select('id', { count: 'exact' }),
+        MH.supabaseAdmin.from('services').select('id', { count: 'exact' }),
+        MH.supabaseAdmin.from('reviews').select('id', { count: 'exact' }).eq('approved', true),
+        MH.supabaseAdmin.from('gallery').select('id', { count: 'exact' }),
+        MH.supabaseAdmin.from('reviews').select('id', { count: 'exact' }).eq('approved', false),
       ]);
       stats.doctors = docs.count || 0;
       stats.services = svcs.count || 0;

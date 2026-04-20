@@ -14,9 +14,9 @@ async function initAdminDoctors() {
 
 // ── Load Doctors ──
 async function loadAdminDoctors() {
-  if (MH.isSupabaseConfigured()) {
+  if (MH.isAdminConfigured()) {
     try {
-      const { data, error } = await MH.supabase.from('doctors').select('*').order('display_order');
+      const { data, error } = await MH.supabaseAdmin.from('doctors').select('*').order('display_order');
       if (!error && data) allDoctors = data;
       else allDoctors = [...MH.SAMPLE_DOCTORS];
     } catch (e) {
@@ -221,14 +221,14 @@ function initDoctorForm() {
 
       // Handle image upload
       const file = fileInput?.files[0];
-      if (file && MH.isSupabaseConfigured()) {
+      if (file && MH.isAdminConfigured()) {
         const filePath = `doctors/${Date.now()}-${file.name}`;
-        const { data: uploadData, error: uploadError } = await MH.supabase.storage
+        const { data: uploadData, error: uploadError } = await MH.supabaseAdmin.storage
           .from('clinic-images')
           .upload(filePath, file);
 
         if (!uploadError) {
-          const { data: { publicUrl } } = MH.supabase.storage
+          const { data: { publicUrl } } = MH.supabaseAdmin.storage
             .from('clinic-images')
             .getPublicUrl(filePath);
           doctorData.image_url = publicUrl;
@@ -239,12 +239,12 @@ function initDoctorForm() {
         doctorData.image_url = preview.src;
       }
 
-      if (MH.isSupabaseConfigured()) {
+      if (MH.isAdminConfigured()) {
         if (editingDoctorId) {
-          const { error } = await MH.supabase.from('doctors').update(doctorData).eq('id', editingDoctorId);
+          const { error } = await MH.supabaseAdmin.from('doctors').update(doctorData).eq('id', editingDoctorId);
           if (error) throw error;
         } else {
-          const { error } = await MH.supabase.from('doctors').insert(doctorData);
+          const { error } = await MH.supabaseAdmin.from('doctors').insert(doctorData);
           if (error) throw error;
         }
       } else {
@@ -288,13 +288,13 @@ function confirmDeleteDoctor(id, name) {
 
 async function deleteDoctor(id) {
   try {
-    if (MH.isSupabaseConfigured()) {
+    if (MH.isAdminConfigured()) {
       // Delete image from storage first
       const doc = allDoctors.find(d => d.id === id);
       if (doc?.image_path) {
-        await MH.supabase.storage.from('clinic-images').remove([doc.image_path]);
+        await MH.supabaseAdmin.storage.from('clinic-images').remove([doc.image_path]);
       }
-      const { error } = await MH.supabase.from('doctors').delete().eq('id', id);
+      const { error } = await MH.supabaseAdmin.from('doctors').delete().eq('id', id);
       if (error) throw error;
     } else {
       allDoctors = allDoctors.filter(d => d.id !== id);
