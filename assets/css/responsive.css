@@ -177,7 +177,7 @@
   }
 
   .floating-whatsapp {
-    bottom: 85px;
+    display: none;
   }
 
   /* Page header */
