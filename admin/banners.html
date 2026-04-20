@@ -14,7 +14,7 @@
 <body>
   <div class="admin-layout">
     <aside class="admin-sidebar" id="admin-sidebar">
-      <div class="sidebar-brand"><div class="sb-icon">MH</div><div class="sb-text"><h3>MH Dental World</h3><span>Admin Portal</span></div></div>
+      <div class="sidebar-brand"><img src="../assets/images/logo.jpg" alt="Logo" class="sb-icon" style="width:40px;height:40px;border-radius:50%;object-fit:cover;"><div class="sb-text"><h3>MH Dental World</h3><span>Admin Portal</span></div></div>
       <nav class="sidebar-nav">
         <div class="sidebar-section-label">Main</div><a href="dashboard.html" class="sidebar-link"><span class="link-icon">📊</span> Dashboard</a>
         <div class="sidebar-section-label">Content Management</div><a href="doctors.html" class="sidebar-link"><span class="link-icon">👨‍⚕️</span> Doctors</a><a href="services.html" class="sidebar-link"><span class="link-icon">🦷</span> Services</a><a href="reviews.html" class="sidebar-link"><span class="link-icon">⭐</span> Reviews</a><a href="gallery.html" class="sidebar-link"><span class="link-icon">🖼️</span> Gallery</a><a href="banners.html" class="sidebar-link active"><span class="link-icon">🎯</span> Hero & Banners</a><a href="faqs.html" class="sidebar-link"><span class="link-icon">❓</span> FAQs</a>
@@ -80,9 +80,66 @@
   <script src="../assets/js/main.js"></script>
   <script src="../assets/js/admin-auth.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded',async()=>{const u=await MH.requireAuth();if(!u)return;MH.initAdminSidebar();loadHeroSettings();});
-    function loadHeroSettings(){const s=localStorage.getItem('mh_hero');if(s){const d=JSON.parse(s);if(d.title)document.getElementById('hero-title').value=d.title;if(d.subtitle)document.getElementById('hero-subtitle').value=d.subtitle;if(d.badge)document.getElementById('hero-badge').value=d.badge;}}
-    function saveHeroSettings(){const d={title:document.getElementById('hero-title').value,subtitle:document.getElementById('hero-subtitle').value,badge:document.getElementById('hero-badge').value,cta1:document.getElementById('hero-cta1').value,cta2:document.getElementById('hero-cta2').value,patients:document.getElementById('stat-patients').value,treatments:document.getElementById('stat-treatments').value,years:document.getElementById('stat-years').value,satisfaction:document.getElementById('stat-satisfaction').value};localStorage.setItem('mh_hero',JSON.stringify(d));MH.showToast('Hero settings saved!','success');}
+    document.addEventListener('DOMContentLoaded', async () => {
+      const u = await MH.requireAuth(); if (!u) return;
+      MH.initAdminSidebar();
+      await loadHeroSettings();
+    });
+
+    async function loadHeroSettings() {
+      if (!MH.isSupabaseConfigured()) return;
+      try {
+        const { data, error } = await MH.supabase
+          .from('clinic_settings')
+          .select('key, value')
+          .eq('key', 'hero_settings')
+          .single();
+        if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows
+        if (data && data.value) {
+          const d = JSON.parse(data.value);
+          if (d.title) document.getElementById('hero-title').value = d.title;
+          if (d.subtitle) document.getElementById('hero-subtitle').value = d.subtitle;
+          if (d.badge) document.getElementById('hero-badge').value = d.badge;
+          if (d.cta1) document.getElementById('hero-cta1').value = d.cta1;
+          if (d.cta2) document.getElementById('hero-cta2').value = d.cta2;
+          if (d.patients) document.getElementById('stat-patients').value = d.patients;
+          if (d.treatments) document.getElementById('stat-treatments').value = d.treatments;
+          if (d.years) document.getElementById('stat-years').value = d.years;
+          if (d.satisfaction) document.getElementById('stat-satisfaction').value = d.satisfaction;
+        }
+      } catch (e) { console.error('Failed to load hero settings:', e); }
+    }
+
+    async function saveHeroSettings() {
+      const d = {
+        title: document.getElementById('hero-title').value,
+        subtitle: document.getElementById('hero-subtitle').value,
+        badge: document.getElementById('hero-badge').value,
+        cta1: document.getElementById('hero-cta1').value,
+        cta2: document.getElementById('hero-cta2').value,
+        patients: document.getElementById('stat-patients').value,
+        treatments: document.getElementById('stat-treatments').value,
+        years: document.getElementById('stat-years').value,
+        satisfaction: document.getElementById('stat-satisfaction').value
+      };
+
+      if (!MH.isSupabaseConfigured()) {
+        MH.showToast('Database not connected', 'error');
+        return;
+      }
+
+      try {
+        // Upsert: insert if not exists, update if exists
+        const { error } = await MH.supabase
+          .from('clinic_settings')
+          .upsert({ key: 'hero_settings', value: JSON.stringify(d), updated_at: new Date().toISOString() }, { onConflict: 'key' });
+        if (error) throw error;
+        MH.showToast('Hero settings saved to database!', 'success');
+      } catch (err) {
+        console.error('Save failed:', err);
+        MH.showToast(err.message || 'Failed to save', 'error');
+      }
+    }
   </script>
 </body>
 </html>

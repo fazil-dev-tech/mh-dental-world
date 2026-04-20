@@ -16,17 +16,17 @@
 
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
+  <link rel="stylesheet" href="assets/css/chatbot.css"></head>
 <body>
 
   <!-- ═══════════ NAVBAR ═══════════ -->
   <nav class="navbar" id="navbar">
     <div class="container">
       <a href="index.html" class="nav-brand">
-        <div class="logo-icon">MH</div>
+        <img src="assets/images/logo.jpg" alt="MH Dental World Logo" class="logo-icon" style="width:44px;height:44px;border-radius:50%;object-fit:cover;">
         <div class="brand-text">
           <span class="brand-name">MH Dental World</span>
-          <span class="brand-tagline">Advanced Dental Care</span>
+          <span class="brand-tagline">Experience Advanced Dentistry</span>
         </div>
       </a>
       <div class="nav-links" id="nav-links">
@@ -54,19 +54,19 @@
     <div class="hero-decor hero-decor-3"></div>
     <div class="container grid-2" style="align-items:center;gap:var(--sp-12);">
       <div class="hero-content">
-        <div class="hero-badge">
+        <div class="hero-badge" id="hero-badge">
           <span class="pulse"></span>
-          Now Open — Welcoming New Patients
+          <span id="hero-badge-text">Now Open — Welcoming New Patients</span>
         </div>
-        <h1 class="hero-title">
-          Your Smile Deserves <span class="highlight">World-Class</span> Dental Care
+        <h1 class="hero-title" id="hero-title">
+          Experience <span class="highlight">Advanced</span> Dentistry
         </h1>
-        <p class="hero-description">
+        <p class="hero-description" id="hero-description">
           Experience premium dentistry with cutting-edge technology, gentle experts, and a luxurious healing environment. Your perfect smile journey starts here.
         </p>
         <div class="hero-actions">
-          <a href="tel:+919845661301" class="btn btn-call btn-lg">📞 Call Now</a>
-          <a href="https://wa.me/919845661301?text=Hello!%20I%20would%20like%20to%20know%20more%20about%20MH%20Dental%20World." class="btn btn-whatsapp btn-lg" target="_blank">💬 WhatsApp Us</a>
+          <a href="tel:+919845661301" class="btn btn-call btn-lg" id="hero-cta1">📞 Call Now</a>
+          <a href="https://wa.me/919845661301?text=Hello!%20I%20would%20like%20to%20know%20more%20about%20MH%20Dental%20World." class="btn btn-whatsapp btn-lg" target="_blank" id="hero-cta2">💬 WhatsApp Us</a>
         </div>
       </div>
       
@@ -274,7 +274,7 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="footer-logo">
-            <div class="footer-logo-icon">MH</div>
+            <img src="assets/images/logo.jpg" alt="MH Dental World Logo" class="footer-logo-icon" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
             <span class="footer-logo-text">MH Dental World</span>
           </div>
           <p>Your trusted partner for premium dental care. We combine advanced technology with compassionate care to deliver exceptional smiles.</p>
@@ -353,6 +353,8 @@
   <script src="assets/js/reviews.js?v=15"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+      // Load hero settings from database
+      await loadHeroFromDB();
       // Load featured services (6)
       await MH.loadServices({ featured: true, limit: 6, containerId: 'services-grid' });
       // Load featured doctors
@@ -366,10 +368,30 @@
       // Re-init scroll reveal for dynamic content
       initScrollReveal();
     });
+
+    async function loadHeroFromDB() {
+      if (!MH.isSupabaseConfigured()) return;
+      try {
+        const { data, error } = await MH.supabase
+          .from('clinic_settings')
+          .select('value')
+          .eq('key', 'hero_settings')
+          .single();
+        if (error || !data) return; // Use hardcoded defaults
+        const h = JSON.parse(data.value);
+        if (h.title) document.getElementById('hero-title').innerHTML = h.title.replace(/(World-Class|Premium|Advanced)/gi, '<span class="highlight">$1</span>');
+        if (h.subtitle) document.getElementById('hero-description').textContent = h.subtitle;
+        if (h.badge) document.getElementById('hero-badge-text').textContent = h.badge;
+        if (h.cta1) document.getElementById('hero-cta1').textContent = h.cta1;
+        if (h.cta2) document.getElementById('hero-cta2').textContent = h.cta2;
+      } catch (e) {
+        console.warn('Hero settings not found, using defaults.');
+      }
+    }
   </script>
 
   <!-- 3D Hero Implementation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="assets/js/hero-3d.js?v=15"></script>
-</body>
+  <script src="assets/js/chatbot.js"></script></body>
 </html>
