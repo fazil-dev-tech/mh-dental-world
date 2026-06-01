@@ -3,8 +3,8 @@
    Public client (anon key) — respects RLS for all pages.
    ============================================================ */
 
-const SUPABASE_URL = 'https://zvfasfezndwffaiuxieg.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2ZmFzZmV6bmR3ZmZhaXV4aWVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MTkwNTgsImV4cCI6MjA5MjE5NTA1OH0.B6AtAz6S6zd66Ooq48KCseTRLC4h5vkQzIFMFjrk9t4';
+const SUPABASE_URL = 'https://kwawcgujuvksqtpqwvxh.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3YXdjZ3VqdXZrc3F0cHF3dnhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMDMxNTYsImV4cCI6MjA5NTg3OTE1Nn0.liFGwiZkhCV0_gPgRu_8_WxwqPP7D2onL21VCoBeAmI';
 
 // NOTE: Use _mhClient internally to avoid conflict with window.supabase (CDN global)
 let _mhClient = null;
