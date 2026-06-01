@@ -122,3 +122,17 @@ If you're modifying this platform, ensure you do not break the API configuration
 This project sits under the **MIT License**.
 
 > *Built to redefine the standard in digital healthcare interfaces.*
+
+---
+
+## 📞 Tech Solutions & Support
+
+Looking for custom tech solutions, enterprise implementations, or need support with this project? Let's connect!
+
+- **Contact Number / WhatsApp:** +91 7019145837
+- **GitHub Profile:** [@fazil-dev-tech](https://github.com/fazil-dev-tech)
+
+<div align="center">
+  <br/>
+  <i>Built with ❤️ by Fazil. Delivering Premium Tech Solutions.</i>
+</div>
